@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>JFianl整合Shiro（二） - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('https://up.enterdesk.com/edpic_source/25/36/2e/25362ed57bd19c7e90da850488584658.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/jFinal" title="jFinal">jFinal</a>
+                    
+                        <a class="tag" href="/tags/Shiro" title="Shiro">Shiro</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>JFianl整合Shiro（二）</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-08-30
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>续上一篇《<a href="/2016/jfinal-shiro-integration1/">JFianl整合Shiro（一）</a>》<br>我准备在这里，具体的描述下JFianl整合Shiro的基本流程。<br>
+            </blockquote>
+            
+            </p>
+<h1 id="Maven-Dependency"><a href="#Maven-Dependency" class="headerlink" title="Maven Dependency"></a>Maven Dependency</h1><p>我现在使用是</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.shiro&lt;/groupId&gt;
+    &lt;artifactId&gt;shiro-web&lt;/artifactId&gt;
+    &lt;version&gt;1.2.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="配置web-xml"><a href="#配置web-xml" class="headerlink" title="配置web.xml"></a>配置web.xml</h1><pre><code class="xml">&lt;listener&gt;
+    &lt;listener-class&gt;org.apache.shiro.web.env.EnvironmentLoaderListener&lt;/listener-class&gt;
+&lt;/listener&gt;
+
+&lt;filter&gt;
+    &lt;filter-name&gt;ShiroFilter&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.shiro.web.servlet.ShiroFilter&lt;/filter-class&gt;
+&lt;/filter&gt;
+
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;ShiroFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;dispatcher&gt;REQUEST&lt;/dispatcher&gt;
+    &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
+    &lt;dispatcher&gt;INCLUDE&lt;/dispatcher&gt;
+    &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+&lt;/filter-mapping&gt;
+</code></pre>
+<ul>
+<li><p><listener> 节点定义了一个ServletContextListener，在web应用程序启动的生时候启动Shiro环境（包括shiro的SecurityManager）默认情况下， 这个listener会自动去找我们的WEB-INF/classes/shiro.ini。</listener></p>
+</li>
+<li><p><filter> 节点定义了主要的ShiroFilter.这个filter被要求去过滤所有进入web应用程序的请求，因此shiro可以在一个请求到达应用程序之前进行必要的身份验证和访问控制。</filter></p>
+</li>
+<li><p><filter-mapping> 节点确保所有请求类型通过被ShiroFilterare提出（filed）filter-mapping节点一般是不指定dispatcher元素的，但是shiro需要它们都被定义，以便它能够过滤所有可能被web应用执行的不同请求类型。</filter-mapping></p>
+</li>
+</ul>
+<h1 id="添加shiro-ini文件"><a href="#添加shiro-ini文件" class="headerlink" title="添加shiro.ini文件"></a>添加shiro.ini文件</h1><p>以下是我常用的shiro.ini</p>
+<pre><code class="ini">[main]
+#sessionId相关设定
+sessionIdCookie=org.apache.shiro.web.servlet.SimpleCookie
+sessionIdCookie.name=jshop-admin-web
+sessionIdCookie.path=/
+sessionIdCookie.maxAge=1800
+sessionIdCookie.httpOnly=true
+
+#sessionManager
+sessionManager = org.apache.shiro.web.session.mgt.DefaultWebSessionManager
+sessionManager.sessionIdCookie = $sessionIdCookie
+sessionManager.sessionIdCookieEnabled = true
+sessionManager.globalSessionTimeout = 3600000
+
+#Realm
+dbRealm = com.yourdomain.module.shiro.Realm
+
+#Cache
+cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+
+#---------------
+securityManager.sessionManager=$sessionManager
+securityManager.realm = $dbRealm
+securityManager.cacheManager = $cacheManager
+
+#[filters] 这个已经被取消，并入main中
+#自定义验证过滤器
+app_auth= com.yourdomain.module.shiro.AuthorizeFilter
+#登录页面
+app_auth.loginUrl = /auth/login
+#未授权页面
+app_auth.unauthorizedUrl=/auth/unauthorized
+
+[urls]
+/test/** = anon
+/public/** = anon
+/uploads/** = anon
+/passport/* = anon
+/** = app_auth
+</code></pre>
+<h2 id="sessionIdCookie、sessionManager"><a href="#sessionIdCookie、sessionManager" class="headerlink" title="sessionIdCookie、sessionManager"></a>sessionIdCookie、sessionManager</h2><p>这俩个似乎没啥好说的。</p>
+<h2 id="cacheManager"><a href="#cacheManager" class="headerlink" title="cacheManager"></a>cacheManager</h2><p>它定义了一个新的缓存管理实例. 缓存在Shiro的构架体系中是一个非常重要的部分 - 它减少了和数据存贮之间持续往返的通讯。这个例子是使用了在单个JVM上比较好使的MemoryConstrainedCacheManager。如果对你的应用是部署在多个服务器（比如服务器集群）的话，你将会想使用一个集群缓存管理器的实现来替代。</p>
+<h2 id="realm"><a href="#realm" class="headerlink" title="realm"></a>realm</h2><p>它是很关键的一个地方，这是是需要自己实现的。它作为shiro的一个组件，可以让shiro访问到你的系统中的用户、角色、权限等数据。</p>
+<h2 id="urls"><a href="#urls" class="headerlink" title="[urls]"></a>[urls]</h2><p>这是非常重要的一个节点，来配置哪些路径映射哪些过滤器来进行鉴权，可以用逗号分开，配置多个过滤器。</p>
+<p>这里的anon是shiro内置的一个过滤器，表示不需要进行鉴权。当然还是很多的shiro内置鉴权过滤器.在后面简单介绍下</p>
+<h2 id="filters"><a href="#filters" class="headerlink" title="[filters]"></a>[filters]</h2><p>1.2以后，filters被并入[main]节点，如果继续保留也没事儿，只是会出个警告而已。app_auth是我自己实现的一个filter系统中主要使用这个filter进行鉴权。</p>
+<h2 id="shiro的内置filters"><a href="#shiro的内置filters" class="headerlink" title="shiro的内置filters"></a>shiro的内置filters</h2><ul>
+<li><strong>anon</strong><br>org.apache.shiro.web.filter.authc.AnonymousFilter</li>
+<li><strong>authc</strong><br>org.apache.shiro.web.filter.authc.FormAuthenticationFilter    </li>
+<li><strong>authcBasic</strong><br>org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter</li>
+<li><strong>logout</strong><br>org.apache.shiro.web.filter.authc.LogoutFilter</li>
+<li><strong>noSessionCreation</strong><br>org.apache.shiro.web.filter.session.NoSessionCreationFilter    </li>
+<li><strong>perms</strong><br>org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter</li>
+<li><strong>port</strong><br>org.apache.shiro.web.filter.authz.PortFilter</li>
+<li><strong>rest</strong><br>org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter</li>
+<li><strong>roles</strong><br>org.apache.shiro.web.filter.authz.RolesAuthorizationFilter</li>
+<li><strong>ssl</strong><br>org.apache.shiro.web.filter.authz.SslFilter</li>
+<li><strong>user</strong><br>org.apache.shiro.web.filter.authc.UserFilter</li>
+</ul>
+<h1 id="自定义realm"><a href="#自定义realm" class="headerlink" title="自定义realm"></a>自定义realm</h1><p>com.yourdomain.module.shiro.Realm</p>
+<h2 id="需要继承shiro的AuthorizingRealm"><a href="#需要继承shiro的AuthorizingRealm" class="headerlink" title="需要继承shiro的AuthorizingRealm"></a>需要继承shiro的AuthorizingRealm</h2><pre><code class="java">public class Realm extends AuthorizingRealm
+</code></pre>
+<h2 id="需要实现2个抽象方法"><a href="#需要实现2个抽象方法" class="headerlink" title="需要实现2个抽象方法"></a>需要实现2个抽象方法</h2><h3 id="doGetAuthenticationInfo"><a href="#doGetAuthenticationInfo" class="headerlink" title="doGetAuthenticationInfo"></a>doGetAuthenticationInfo</h3><p>主要是在登录的时候，进行用户身份验证</p>
+<pre><code class="java"> /**
+ * 获取用户验证信息
+ * @param authcToken 所需验证的token
+ * @return null or 身份信息
+ * @throws AuthenticationException 验证异常
+ */
+protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
+    UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+    SysAdmin admin = AdminService.getByUsername(token.getUsername());
+    if (admin != null) {
+        if(!admin.getPassword().equals(String.valueOf(token.getPassword()))){
+            throw new AuthenticationException(&quot;密码错误&quot;);
+        }
+        Db.update(&quot;update sys_admin set loginTime=?,loginCount=loginCount+1 where id=?&quot;,new Date(),admin.getId());
+        return new SimpleAuthenticationInfo(admin, admin.getPassword(),admin.getUsername());
+    } else {
+        throw new AuthenticationException(&quot;用户不存在&quot;);
+    }
+
+}
+</code></pre>
+<h3 id="doGetAuthorizationInfo"><a href="#doGetAuthorizationInfo" class="headerlink" title="doGetAuthorizationInfo"></a>doGetAuthorizationInfo</h3><p>在第一次鉴权的时候进行调用，获取并保存到chache中（没有配置cache是不是每次都得调用？）</p>
+<pre><code class="java">/**
+ * 获取用户授权信息
+ * @param principals 用户身份
+ * @return null or 授权信息
+ */
+protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    SysAdmin userInPrincipal = (SysAdmin) principals.getPrimaryPrincipal();
+    //根据用户获取权限
+    List&lt;String&gt; stringPermissions = AdminService.getPermissions(userInPrincipal.getId());
+    SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+    //stringPermissions结构：
+    //user
+    //user:list
+    //user:add
+    //user:edit
+    //...
+    info.addStringPermissions(stringPermissions);
+    return info;
+}
+</code></pre>
+<p>我这里返回的：字符串权限表达式（字符串通配符权限），对于各自所对应的资源（主要就是url路径），我是保存在数据库中，方便进行配置，然后再加上缓存。在自定义filter中将url转换成对应的表达式，然后进行鉴权。</p>
+<h1 id="登录、注销"><a href="#登录、注销" class="headerlink" title="登录、注销"></a>登录、注销</h1><h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><pre><code class="java">public void login() {
+    if(Boolean.FALSE.equals(validateCaptcha(&quot;captcha&quot;))){
+        renderJson(CommonService.ajaxError(&quot;验证码错误&quot;));
+        return;
+    }
+    String username = getPara(&quot;username&quot;);
+    String password = HashKit.md5(getPara(&quot;password&quot;));
+    Subject subject = SecurityUtils.getSubject();
+    UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+    try {
+        subject.login(token);
+        renderJson(CommonService.ajaxSuccess());
+    } catch (AuthenticationException e) {
+        //虽然在realm中有具体的错误信息，但是安全起见，统一返回登录失败
+        renderJson(CommonService.ajaxError(&quot;登陆失败&quot;));
+    }
+}
+</code></pre>
+<h2 id="注销"><a href="#注销" class="headerlink" title="注销"></a>注销</h2><pre><code class="java">public void logout() {
+    Subject subject = SecurityUtils.getSubject();
+    subject.logout();
+    redirect(&quot;/passport/login&quot;);
+}
+</code></pre>
+<p>是不是感觉很easy：）</p>
+<h1 id="自定义filter"><a href="#自定义filter" class="headerlink" title="自定义filter"></a>自定义filter</h1><p>com.yourdomain.module.shiro.AuthorizeFilter</p>
+<h2 id="继承shiro的AuthorizationFilter"><a href="#继承shiro的AuthorizationFilter" class="headerlink" title="继承shiro的AuthorizationFilter"></a>继承shiro的AuthorizationFilter</h2><pre><code class="java">public class AuthorizeFilter extends AuthorizationFilter 
+</code></pre>
+<h2 id="实现抽象方法isAccessAllowed"><a href="#实现抽象方法isAccessAllowed" class="headerlink" title="实现抽象方法isAccessAllowed"></a>实现抽象方法isAccessAllowed</h2><pre><code class="java">protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
+    //-----------------用户验证------------------
+    Subject currentUser = getSubject(request, response);
+    if (!currentUser.isAuthenticated())
+        return false;
+    //-----------------获取资源权限表达式-------------
+    SysAdmin user = (SysAdmin) currentUser.getPrincipal();
+    //request中加入attribute便于controller调用admin的信息
+    request.setAttribute(&quot;admin&quot;,user);
+    // 根据actionKey分析出权限表达式
+    HttpServletRequest hsr = ((HttpServletRequest) request);
+    String root = hsr.getContextPath();
+    String URI = hsr.getRequestURI();
+    String actionKey = URI.replace(root,&quot;&quot;);
+    if(&quot;&quot;.equals(actionKey))
+        actionKey=&quot;/&quot;;
+    RoleService roleService = new RoleService();
+    String expression = roleService.getActionKeyExpression(actionKey);
+    //-----------------进行鉴权-------------
+    if (user==null)
+        return false;
+    else if(user.getStr(&quot;username&quot;).equals(&quot;superadmin&quot;)){
+        //超级管理员具有所有权限
+        return true;
+    }else if(expression==null){
+        return false;
+    }else if(currentUser.isPermitted(expression)){
+        //鉴权
+        return true;
+    }else{
+        return false;
+    }
+
+}
+</code></pre>
+<ol>
+<li>在这里，我根据actionKey分析出所对应的权限表达式</li>
+<li>对于用户superadmin，默认具有所有权限，等同于，不需要鉴权</li>
+<li>其他用户根据权限表达式，来进行鉴权</li>
+</ol>
+<h1 id="关于用户、角色、url资源及对应的权限表达式"><a href="#关于用户、角色、url资源及对应的权限表达式" class="headerlink" title="关于用户、角色、url资源及对应的权限表达式"></a>关于用户、角色、url资源及对应的权限表达式</h1><p>你可以按照你自己的方式来构建一套，我相信对于大多数人应该不成问题，因为这个已经不属于shiro的范畴了。自己搞几个表，搞几个配置界面，做下缓存策略等等。</p>
+<h1 id="模板引擎中使用扩展函数（标签）"><a href="#模板引擎中使用扩展函数（标签）" class="headerlink" title="模板引擎中使用扩展函数（标签）"></a>模板引擎中使用扩展函数（标签）</h1><p>有时候你的应用也许需要在界面上进行鉴权，比如按钮啥的，这时候就可能需要扩展模板引擎的函数或者标签。</p>
+<p>可以参考下 《beetl 和 shrio 结合》 <a href="http://my.oschina.net/xiandafu/blog/143109" target="_blank" rel="noopener">http://my.oschina.net/xiandafu/blog/143109</a></p>
+<p>只要解决如何扩展模板引擎的函数或者标签，其他，我想应该都是雷同的吧。</p>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

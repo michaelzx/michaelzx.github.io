@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>了解下Consul（一）介绍与安装 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Consul" title="Consul">Consul</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>了解下Consul（一）介绍与安装</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-02-22
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>Consul 是 HashiCorp 公司推出的开源工具，用于实现分布式系统的服务发现与配置。与其他分布式服务注册与发现的方案，Consul的方案更“一站式” ，内置了服务注册与发现框架<br>
+            </blockquote>
+            
+            </p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>据说使用起来也较 为简单。Consul使用Go语言编写，因此具有天然可移植性(支持Linux、windows和Mac OS X)；安装包仅包含一个可执行文件，方便部署，与Docker等轻量级容器可无缝配合 。 基于 Mozilla Public License 2.0 的协议进行开源. Consul 支持健康检查,并允许 HTTP 和 DNS 协议调用 API 存储键值对. 一致性协议采用 Raft 算法,用来保证服务的高可用. 使用 GOSSIP 协议管理成员和广播消息, 并且支持 ACL 访问控制.</p>
+<h1 id="Consul-四大特性"><a href="#Consul-四大特性" class="headerlink" title="Consul 四大特性"></a>Consul 四大特性</h1><ol>
+<li>Service Discovery (服务发现)</li>
+<li>Health Check (健康检查)</li>
+<li>Multi Datacenter (多数据中心)</li>
+<li>Key/Value Storage</li>
+</ol>
+<h1 id="Consul-Glossary-术语"><a href="#Consul-Glossary-术语" class="headerlink" title="Consul Glossary(术语)"></a>Consul Glossary(术语)</h1><h2 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h2><ul>
+<li>Agent 是一个守护进程</li>
+<li>运行在Consul集群的每个成员上</li>
+<li><font color="red">有Client 和 Server 两种模式</font></li>
+<li>所有Agent都可以被调用DNS或者HTTP API,并负责检查和维护同步</li>
+</ul>
+<h2 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h2><ul>
+<li>Client 将所有RPC请求转发至Server</li>
+<li>Client 是相对无状态的</li>
+<li>Client 唯一做的就是参与LAN Gossip Pool</li>
+<li>Client 只消耗少量的资源和少量的网络带宽</li>
+</ul>
+<h2 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h2><ul>
+<li>参与 Raft quorum(一致性判断)</li>
+<li>响应RPC查询请求</li>
+<li>维护集群的状态</li>
+<li>转发查询到Leader 或 远程数据中心</li>
+</ul>
+<h2 id="Datacenter"><a href="#Datacenter" class="headerlink" title="Datacenter"></a>Datacenter</h2><p>顾名思义其为数据中心, 如何定义数据中心呢?  需要以下三点</p>
+<ul>
+<li>私有的</li>
+<li>低延迟</li>
+<li>高带宽<br>故: 可以简单的理解为同属一个内网环境, 如北京机房和香港机房就不一定满足以上三个条件</li>
+</ul>
+<h2 id="Consensus-一致性"><a href="#Consensus-一致性" class="headerlink" title="Consensus (一致性)"></a>Consensus (一致性)</h2><p>Consul 使用consensus protocol 来提供CAP(一致性,高可用,分区容错性)</p>
+<h2 id="Gossip"><a href="#Gossip" class="headerlink" title="Gossip"></a>Gossip</h2><p>一种协议: 用来保证 最终一致性 , 即: 无法保证在某个时刻, 所有节点状态一致, 但可以保证”最终”一致</p>
+<h2 id="LAN-Gossip"><a href="#LAN-Gossip" class="headerlink" title="LAN Gossip"></a>LAN Gossip</h2><p>Local Area Network Gossip,  位于同一个局域网或者数据中心的节点</p>
+<h2 id="WAN-Gossip"><a href="#WAN-Gossip" class="headerlink" title="WAN Gossip"></a>WAN Gossip</h2><p>Wide Area Network Gossip, 只用于Server之间, 分部在不同的数据中心或广域网</p>
+<h1 id="构架图"><a href="#构架图" class="headerlink" title="构架图"></a>构架图</h1><p><img src="https://www.consul.io/assets/images/consul-arch-420ce04a.png" alt=""></p>
+<h1 id="安装Consul"><a href="#安装Consul" class="headerlink" title="安装Consul"></a>安装Consul</h1><p>下载地址：<a href="https://www.consul.io/downloads.html" target="_blank" rel="noopener">https://www.consul.io/downloads.html</a></p>
+<p>各种平台的都有下载：<code>Mac OS X</code>、<code>FreeBSD</code>、<code>Linux</code>、<code>Solaris</code>、<code>Windows</code></p>
+<p>我是在mac上使用，所以下了个mac版本的</p>
+<p>下过来的zip，解压以后得到<code>一个单独二级制文件</code>，我把它直接放到了<code>/usr/local/bin</code>下</p>
+<p>这样，在控制台中，我就直接能使用了，可以使用以下命令，来测试是否可运行</p>
+<pre><code>$ consul -v
+Consul v1.0.3
+Protocol 2 spoken by default, understands 2 to 3 (agent will automatically use protocol &gt;2 when speaking to compatible agents)
+</code></pre><h1 id="以调试模式启动Consul"><a href="#以调试模式启动Consul" class="headerlink" title="以调试模式启动Consul"></a>以调试模式启动Consul</h1><p>可以用下面的命令启动Consul的开发模式：</p>
+<pre><code>$ consul agent -dev
+==&gt; Starting Consul agent...
+==&gt; Consul agent running!
+           Version: &#39;v1.0.3&#39;
+           Node ID: &#39;aef05660-c518-c124-f8bd-e2e8148b0fa2&#39;
+         Node name: &#39;zhangxiaodeMacBook-Pro.local&#39;
+        Datacenter: &#39;dc1&#39; (Segment: &#39;&lt;all&gt;&#39;)
+            Server: true (Bootstrap: false)
+       Client Addr: [127.0.0.1] (HTTP: 8500, HTTPS: -1, DNS: 8600)
+      Cluster Addr: 127.0.0.1 (LAN: 8301, WAN: 8302)
+           Encrypt: Gossip: false, TLS-Outgoing: false, TLS-Incoming: false
+
+==&gt; Log data will now stream in as it occurs:
+
+    2018/02/03 15:37:32 [DEBUG] Using random ID &quot;aef05660-c518-c124-f8bd-e2e8148b0fa2&quot; as node ID
+    2018/02/03 15:37:32 [INFO] raft: Initial configuration (index=1): [{Suffrage:Voter ID:aef05660-c518-c124-f8bd-e2e8148b0fa2 Address:127.0.0.1:8300}]
+    2018/02/03 15:37:32 [INFO] raft: Node at 127.0.0.1:8300 [Follower] entering Follower state (Leader: &quot;&quot;)
+    2018/02/03 15:37:32 [INFO] serf: EventMemberJoin: zhangxiaodeMacBook-Pro.local.dc1 127.0.0.1
+    2018/02/03 15:37:32 [INFO] serf: EventMemberJoin: zhangxiaodeMacBook-Pro.local 127.0.0.1
+    2018/02/03 15:37:32 [INFO] consul: Handled member-join event for server &quot;zhangxiaodeMacBook-Pro.local.dc1&quot; in area &quot;wan&quot;
+    2018/02/03 15:37:32 [INFO] consul: Adding LAN server zhangxiaodeMacBook-Pro.local (Addr: tcp/127.0.0.1:8300) (DC: dc1)
+    2018/02/03 15:37:32 [INFO] agent: Started DNS server 127.0.0.1:8600 (udp)
+    2018/02/03 15:37:32 [INFO] agent: Started DNS server 127.0.0.1:8600 (tcp)
+    2018/02/03 15:37:32 [INFO] agent: Started HTTP server on 127.0.0.1:8500 (tcp)
+    2018/02/03 15:37:32 [INFO] agent: started state syncer
+    2018/02/03 15:37:32 [WARN] raft: Heartbeat timeout from &quot;&quot; reached, starting election
+    2018/02/03 15:37:32 [INFO] raft: Node at 127.0.0.1:8300 [Candidate] entering Candidate state in term 2
+    2018/02/03 15:37:32 [DEBUG] raft: Votes needed: 1
+    2018/02/03 15:37:32 [DEBUG] raft: Vote granted from aef05660-c518-c124-f8bd-e2e8148b0fa2 in term 2. Tally: 1
+    2018/02/03 15:37:32 [INFO] raft: Election won. Tally: 1
+    2018/02/03 15:37:32 [INFO] raft: Node at 127.0.0.1:8300 [Leader] entering Leader state
+    2018/02/03 15:37:32 [INFO] consul: cluster leadership acquired
+    2018/02/03 15:37:32 [INFO] consul: New leader elected: zhangxiaodeMacBook-Pro.local
+    2018/02/03 15:37:32 [DEBUG] consul: Skipping self join check for &quot;zhangxiaodeMacBook-Pro.local&quot; since the cluster is too small
+    2018/02/03 15:37:32 [INFO] consul: member &#39;zhangxiaodeMacBook-Pro.local&#39; joined, marking health alive
+    2018/02/03 15:37:33 [DEBUG] Skipping remote check &quot;serfHealth&quot; since it is managed automatically
+    2018/02/03 15:37:33 [INFO] agent: Synced node info
+    2018/02/03 15:37:33 [DEBUG] agent: Node info in sync
+    2018/02/03 15:37:33 [DEBUG] Skipping remote check &quot;serfHealth&quot; since it is managed automatically
+    2018/02/03 15:37:33 [DEBUG] agent: Node info in sync
+    2018/02/03 15:37:38 [DEBUG] http: Request GET /v1/event/list?wait=5s&amp;index=1 (5.001249189s) from=127.0.0.1:54222
+</code></pre><blockquote>
+<p>启动一个开发模式的consul非常简单<br>但是在生产环境，我想并没有这么简单，后面再深入了解下</p>
+</blockquote>
+<p>现在访问下：<a href="http://localhost:8500" target="_blank" rel="noopener">http://localhost:8500</a> ，可以看到consul的ui界面</p>
+<h1 id="docker-compose-参考"><a href="#docker-compose-参考" class="headerlink" title="docker-compose 参考"></a>docker-compose 参考</h1><pre><code class="yaml">version: &quot;2&quot;
+services:
+  app1:
+    build: ./python_app/
+    ports:
+      - &quot;8080:8080&quot;
+  app2:
+    build: ./python_app/
+    ports:
+      - &quot;8081:8080&quot;
+  consul1:
+    image: &quot;progrium/consul:latest&quot;
+    container_name: &quot;consul1&quot;
+    hostname: &quot;consul1&quot;
+    ports:
+      - &quot;8400:8400&quot;
+      - &quot;8500:8500&quot;
+      - &quot;8600:53&quot;
+    command: &quot;-server -bootstrap-expect 3 -ui-dir /ui&quot;
+  consul2:
+    image: &quot;progrium/consul:latest&quot;
+    container_name: &quot;consul2&quot;
+    hostname: &quot;consul2&quot;
+    expose:
+      - &quot;8400&quot;
+      - &quot;8500&quot;
+      - &quot;8600&quot;
+    command: &quot;-server -join consul1&quot;
+    depends_on:
+      - consul1
+  consul3:
+    image: &quot;progrium/consul:latest&quot;
+    container_name: &quot;consul3&quot;
+    hostname: &quot;consul3&quot;
+    expose:
+      - &quot;8400&quot;
+      - &quot;8500&quot;
+      - &quot;8600&quot;
+    command: &quot;-server -join consul1&quot;
+    depends_on:
+      - consul1
+</code></pre>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><blockquote>
+<p><a href="https://www.consul.io/docs/install/index.html" target="_blank" rel="noopener">《Install Consul》</a><br><a href="http://www.spring4all.com/article/291" target="_blank" rel="noopener">《Spring Cloud构建微服务架构：服务注册与发现（Eureka、Consul）【Dalston版】》</a><br><a href="http://www.cnblogs.com/duanxz/p/7053301.html" target="_blank" rel="noopener">《服务注册发现consul之一：spring cloud consul介绍及安装》</a><br><a href="https://www.consul.io/intro/index.html" target="_blank" rel="noopener">《Introduction to Consul》</a><br><a href="https://www.jianshu.com/p/28c6bd590ca0" target="_blank" rel="noopener">《现有系统如何集成Consul服务发现》</a></p>
+</blockquote>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

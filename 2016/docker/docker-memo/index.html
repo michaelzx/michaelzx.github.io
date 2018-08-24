@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>Docker备忘录 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Docker" title="Docker">Docker</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>Docker备忘录</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-09-17
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>个人Docker使用备忘录<br>
+            </blockquote>
+            
+            </p>
+<h1 id="常用命令（个人收藏）"><a href="#常用命令（个人收藏）" class="headerlink" title="常用命令（个人收藏）"></a>常用命令（个人收藏）</h1><h2 id="为Alpine安装bash"><a href="#为Alpine安装bash" class="headerlink" title="为Alpine安装bash"></a>为Alpine安装bash</h2><pre><code class="bash">docker exec &lt;容器名orID&gt; apk add --no-cache --update-cache bash
+</code></pre>
+<h2 id="进入容器bash"><a href="#进入容器bash" class="headerlink" title="进入容器bash"></a>进入容器bash</h2><pre><code class="bash">docker exec -it &lt;容器名orID&gt; /bin/bash
+</code></pre>
+<h2 id="大保健"><a href="#大保健" class="headerlink" title="大保健"></a>大保健</h2><p>用一行命令大扫除：</p>
+<pre><code class="bash">docker kill $(docker ps -q) ; docker rm $(docker ps -a -q) ; docker rmi $(docker images -q -a)
+</code></pre>
+<h2 id="查看-docker中对应容器的-IP"><a href="#查看-docker中对应容器的-IP" class="headerlink" title="查看 docker中对应容器的 IP"></a>查看 docker中对应容器的 IP</h2><pre><code class="bash">docker inspect 容器ID
+docker inspect 容器ID | grep IPAddress
+</code></pre>
+<h2 id="容器同步宿主机时间"><a href="#容器同步宿主机时间" class="headerlink" title="容器同步宿主机时间"></a>容器同步宿主机时间</h2><p>非常easy的方法，只要给容器加上一个volume：</p>
+<pre><code>/etc/localtime:/etc/localtime:ro
+</code></pre>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

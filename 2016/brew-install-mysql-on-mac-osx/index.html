@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>Mac下使用brew安装Mysql - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Mac" title="Mac">Mac</a>
+                    
+                        <a class="tag" href="/tags/Mysql" title="Mysql">Mysql</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>Mac下使用brew安装Mysql</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-08-25
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>OS X 下通过 brew 安装 mysql 还是非常方便的<br>
+            </blockquote>
+            
+            </p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><pre><code class="bash">brew install mysql
+</code></pre>
+<p>下载完成以后需要编译，此时需要占用很大的cpu，风扇会狂叫，没事，完了就好</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><pre><code>sudo mysql.server start
+</code></pre><p>此时可能会报错：</p>
+<pre><code>Starting MySQL
+. ERROR! The server quit without updating PID file (/usr/local/var/mysql/xxxxx.local.pid).
+</code></pre><p>这是由于权限问题造成的<br>可以通用一下命令修改权限</p>
+<pre><code>sudo chmod -R a+rwx /usr/local/var/mysql
+</code></pre><p>再执行</p>
+<pre><code>sudo mysql.server start
+</code></pre><p>显示</p>
+<pre><code>Starting MySQL
+. SUCCESS!
+</code></pre><p>启动成功</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>启动后，需要对mysql进行一些配置，可以通过以下命令进行初始化：</p>
+<pre><code>/usr/local/opt/mysql/bin/mysql_secure_installation
+</code></pre><h1 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h1><pre><code>sudo mysql.server stop
+</code></pre><h1 id="重启"><a href="#重启" class="headerlink" title="重启"></a>重启</h1><pre><code>sudo mysql.server restart
+</code></pre><h1 id="关于my-cnf"><a href="#关于my-cnf" class="headerlink" title="关于my.cnf"></a>关于my.cnf</h1><p>通过brew安装的mysql似乎默认并没有使用my.cnf，直接使用默认配置启动</p>
+<h2 id="my-cnf文件位置"><a href="#my-cnf文件位置" class="headerlink" title="my.cnf文件位置"></a>my.cnf文件位置</h2><pre><code>mysql --help | grep &#39;Default options&#39; -A 1
+</code></pre><pre><code>Default options are read from the following files in the given order:
+/etc/my.cnf /etc/mysql/my.cnf /usr/local/etc/my.cnf ~/.my.cnf
+</code></pre><p>mysql会按照以上情况顺序加载mysql，所以就按需建立一个吧</p>
+<h1 id="validate-password"><a href="#validate-password" class="headerlink" title="validate_password"></a>validate_password</h1><p>mysql5.7（5.6应该也有，具体从哪个版本开始，不太清楚）默认开启了validate_password插件。但在本地开发环境中，为了尽可能的方便，我们是不需要开启它的，此时可以在my.cnf中配置，对其进行关闭</p>
+<pre><code>[mysqld]
+validate_password=off
+</code></pre>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>了解下Consul（二）CLI - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Consul" title="Consul">Consul</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>了解下Consul（二）CLI</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-02-22
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>Consul可以通过以命令行界面（CLI）来进行控制。先做了解，可能以后能在SpringCloud里面会用上。<br>
+            </blockquote>
+            
+            </p>
+<h1 id="查看可以用的command和说明"><a href="#查看可以用的command和说明" class="headerlink" title="查看可以用的command和说明"></a>查看可以用的command和说明</h1><pre><code>$ consul -h
+Usage: consul [--version] [--help] &lt;command&gt; [&lt;args&gt;]
+
+Available commands are:
+    agent          Runs a Consul agent
+    catalog        Interact with the catalog
+    event          Fire a new event
+    exec           Executes a command on Consul nodes
+    force-leave    Forces a member of the cluster to enter the &quot;left&quot; state
+    info           Provides debugging information for operators.
+    join           Tell Consul agent to join cluster
+    keygen         Generates a new encryption key
+    keyring        Manages gossip layer encryption keys
+    kv             Interact with the key-value store
+    leave          Gracefully leaves the Consul cluster and shuts down
+    lock           Execute a command holding a lock
+    maint          Controls node or service maintenance mode
+    members        Lists the members of a Consul cluster
+    monitor        Stream logs from a Consul agent
+    operator       Provides cluster-level tools for Consul operators
+    reload         Triggers the agent to reload configuration files
+    rtt            Estimates network round trip time between nodes
+    snapshot       Saves, restores and inspects snapshots of Consul server state
+    validate       Validate config files/directories
+    version        Prints the Consul version
+    watch          Watch for changes in Consul
+</code></pre><blockquote>
+<p>注意：版本不同，这些命令可能是不用的，<br>我现在装的是1.0.3，这里的命令和<a href="https://www.consul.io/docs/commands/index.html" target="_blank" rel="noopener">官网文档</a>略有不同</p>
+</blockquote>
+<h1 id="Consul常用命令"><a href="#Consul常用命令" class="headerlink" title="Consul常用命令"></a>Consul常用命令</h1><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>解释</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agent</td>
+<td>运行一个consul agent</td>
+<td>consul agent -dev</td>
+</tr>
+<tr>
+<td>join</td>
+<td>将agent加入到consul集群</td>
+<td>consul join IP</td>
+</tr>
+<tr>
+<td>members</td>
+<td>列出consul cluster集群中的members</td>
+<td>members  consul members</td>
+</tr>
+<tr>
+<td>leave</td>
+<td>将节点移除所在集群</td>
+<td>consul leave</td>
+</tr>
+</tbody>
+</table>
+<h1 id="核心命令：consul-agent"><a href="#核心命令：consul-agent" class="headerlink" title="核心命令：consul agent"></a>核心命令：consul agent</h1><h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>我们先来看看这个命令的参数</p>
+<pre><code>$ consul agent -h
+Usage: consul agent [options]
+
+  Starts the Consul agent and runs until an interrupt is received. The
+  agent represents a single node in a cluster.
+
+HTTP API Options
+
+  -datacenter=&lt;value&gt;
+     Datacenter of the agent.
+
+Command Options
+
+  -advertise=&lt;value&gt;
+     Sets the advertise address to use.
+
+  -advertise-wan=&lt;value&gt;
+     Sets address to advertise on WAN instead of -advertise address.
+
+  -bind=&lt;value&gt;
+     Sets the bind address for cluster communication.
+
+  -bootstrap
+     Sets server to bootstrap mode.
+
+  -bootstrap-expect=&lt;value&gt;
+     Sets server to expect bootstrap mode.
+
+  -client=&lt;value&gt;
+     Sets the address to bind for client access. This includes RPC, DNS,
+     HTTP and HTTPS (if configured).
+
+  -config-dir=&lt;value&gt;
+     Path to a directory to read configuration files from. This
+     will read every file ending in &#39;.json&#39; as configuration in this
+     directory in alphabetical order. Can be specified multiple times.
+
+  -config-file=&lt;value&gt;
+     Path to a JSON file to read configuration from. Can be specified
+     multiple times.
+
+  -config-format=&lt;value&gt;
+     Config files are in this format irrespective of their extension.
+     Must be &#39;hcl&#39; or &#39;json&#39;
+
+  -data-dir=&lt;value&gt;
+     Path to a data directory to store agent state.
+
+  -dev
+     Starts the agent in development mode.
+
+  -disable-host-node-id
+     Setting this to true will prevent Consul from using information
+     from the host to generate a node ID, and will cause Consul to
+     generate a random node ID instead.
+
+  -disable-keyring-file
+     Disables the backing up of the keyring to a file.
+
+  -dns-port=&lt;value&gt;
+     DNS port to use.
+
+  -domain=&lt;value&gt;
+     Domain to use for DNS interface.
+
+  -enable-script-checks
+     Enables health check scripts.
+
+  -encrypt=&lt;value&gt;
+     Provides the gossip encryption key.
+
+  -hcl=&lt;value&gt;
+     hcl config fragment. Can be specified multiple times.
+
+  -http-port=&lt;value&gt;
+     Sets the HTTP API port to listen on.
+
+  -join=&lt;value&gt;
+     Address of an agent to join at start time. Can be specified
+     multiple times.
+
+  -join-wan=&lt;value&gt;
+     Address of an agent to join -wan at start time. Can be specified
+     multiple times.
+
+  -log-level=&lt;value&gt;
+     Log level of the agent.
+
+  -node=&lt;value&gt;
+     Name of this node. Must be unique in the cluster.
+
+  -node-id=&lt;value&gt;
+     A unique ID for this node across space and time. Defaults to a
+     randomly-generated ID that persists in the data-dir.
+
+  -node-meta=&lt;key:value&gt;
+     An arbitrary metadata key/value pair for this node, of the format
+     `key:value`. Can be specified multiple times.
+
+  -non-voting-server
+     (Enterprise-only) This flag is used to make the server not
+     participate in the Raft quorum, and have it only receive the data
+     replication stream. This can be used to add read scalability to
+     a cluster in cases where a high volume of reads to servers are
+     needed.
+
+  -pid-file=&lt;value&gt;
+     Path to file to store agent PID.
+
+  -protocol=&lt;value&gt;
+     Sets the protocol version. Defaults to latest.
+
+  -raft-protocol=&lt;value&gt;
+     Sets the Raft protocol version. Defaults to latest.
+
+  -recursor=&lt;value&gt;
+     Address of an upstream DNS server. Can be specified multiple times.
+
+  -rejoin
+     Ignores a previous leave and attempts to rejoin the cluster.
+
+  -retry-interval=&lt;value&gt;
+     Time to wait between join attempts.
+
+  -retry-interval-wan=&lt;value&gt;
+     Time to wait between join -wan attempts.
+
+  -retry-join=&lt;value&gt;
+     Address of an agent to join at start time with retries enabled. Can
+     be specified multiple times.
+
+  -retry-join-wan=&lt;value&gt;
+     Address of an agent to join -wan at start time with retries
+     enabled. Can be specified multiple times.
+
+  -retry-max=&lt;value&gt;
+     Maximum number of join attempts. Defaults to 0, which will retry
+     indefinitely.
+
+  -retry-max-wan=&lt;value&gt;
+     Maximum number of join -wan attempts. Defaults to 0, which will
+     retry indefinitely.
+
+  -segment=&lt;value&gt;
+     (Enterprise-only) Sets the network segment to join.
+
+  -serf-lan-bind=&lt;value&gt;
+     Address to bind Serf LAN listeners to.
+
+  -serf-wan-bind=&lt;value&gt;
+     Address to bind Serf WAN listeners to.
+
+  -server
+     Switches agent to server mode.
+
+  -syslog
+     Enables logging to syslog.
+
+  -ui
+     Enables the built-in static web UI server.
+
+  -ui-dir=&lt;value&gt;
+     Path to directory containing the web UI resources.
+</code></pre><blockquote>
+<p>很多很暴力…</p>
+</blockquote>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h2><blockquote>
+<p>-data-dir</p>
+</blockquote>
+<ul>
+<li>作用：指定agent储存状态的数据目录</li>
+<li>这是所有agent都必须的</li>
+<li>对于server尤其重要，因为他们必须持久化集群的状态</li>
+</ul>
+<blockquote>
+<p>-config-dir</p>
+</blockquote>
+<ul>
+<li>作用：指定service的配置文件和检查定义所在的位置</li>
+<li>通常会指定为”某一个路径/consul.d”（通常情况下，.d表示一系列配置文件存放的目录）</li>
+</ul>
+<blockquote>
+<p>-config-file</p>
+</blockquote>
+<ul>
+<li>作用：指定一个要装载的配置文件</li>
+<li>该选项可以配置多次，进而配置多个配置文件（后边的会合并前边的，相同的值覆盖）</li>
+</ul>
+<blockquote>
+<p>-dev</p>
+</blockquote>
+<ul>
+<li>作用：创建一个开发环境下的server节点</li>
+<li>该参数配置下，不会有任何持久化操作，即不会有任何数据写入到磁盘</li>
+<li>这种模式不能用于生产环境（因为第二条）</li>
+</ul>
+<blockquote>
+<p>-bootstrap-expect</p>
+</blockquote>
+<ul>
+<li>作用：该命令通知consul server我们现在准备加入的server节点个数，该参数是为了延迟日志复制的启动直到我们指定数量的server节点成功的加入后启动。</li>
+</ul>
+<blockquote>
+<p>-node</p>
+</blockquote>
+<ul>
+<li>作用：指定节点在集群中的名称</li>
+<li>该名称在集群中必须是唯一的（默认采用机器的host）</li>
+<li>推荐：直接采用机器的IP</li>
+</ul>
+<blockquote>
+<p>-bind</p>
+</blockquote>
+<ul>
+<li>作用：指明节点的IP地址</li>
+<li>有时候不指定绑定IP，会报<code>Failed to get advertise address: Multiple private IPs found. Please configure one.</code>的异常</li>
+</ul>
+<blockquote>
+<p>-server</p>
+</blockquote>
+<ul>
+<li>作用：指定节点为server</li>
+<li>每个数据中心（DC）的server数推荐至少为1，至多为5</li>
+<li>所有的server都采用raft一致性算法来确保事务的一致性和线性化，事务修改了集群的状态，且集群的状态保存在每一台server上保证可用性</li>
+<li>server也是与其他DC交互的门面（gateway）</li>
+</ul>
+<blockquote>
+<p>-client</p>
+</blockquote>
+<ul>
+<li>作用：指定节点为client，指定客户端接口的绑定地址，包括：HTTP、DNS、RPC</li>
+<li>默认是127.0.0.1，只允许回环接口访问</li>
+<li>若不指定为-server，其实就是-client</li>
+</ul>
+<blockquote>
+<p>-join</p>
+</blockquote>
+<ul>
+<li>作用：将节点加入到集群</li>
+</ul>
+<blockquote>
+<p>-datacenter（老版本叫-dc，-dc已经失效）</p>
+</blockquote>
+<ul>
+<li>作用：指定机器加入到哪一个数据中心中</li>
+</ul>
+<h2 id="跑一跑"><a href="#跑一跑" class="headerlink" title="跑一跑"></a>跑一跑</h2><h3 id="单机"><a href="#单机" class="headerlink" title="单机"></a>单机</h3><p>上一篇中我以开发模式启动了，现在我要来试试，正常启动</p>
+<pre><code>$ consul agent
+==&gt; data_dir cannot be empty
+</code></pre><p>oops,果然没那么简单……那我给他加上</p>
+<pre><code class="shell">$ consul agent -data-dir=/Users/michael/tmp_consul
+==&gt; Starting Consul agent...
+==&gt; Consul agent running!
+           Version: &#39;v1.0.3&#39;
+           Node ID: &#39;13042cd6-06ea-7f0a-4997-a2d2aecfe698&#39;
+         Node name: &#39;zhangxiaodeMacBook-Pro.local&#39;
+        Datacenter: &#39;dc1&#39; (Segment: &#39;&#39;)
+            Server: false (Bootstrap: false)
+       Client Addr: [127.0.0.1] (HTTP: 8500, HTTPS: -1, DNS: 8600)
+      Cluster Addr: 192.168.31.222 (LAN: 8301, WAN: 8302)
+           Encrypt: Gossip: false, TLS-Outgoing: false, TLS-Incoming: false
+
+==&gt; Log data will now stream in as it occurs:
+
+    2018/02/03 16:34:56 [INFO] serf: EventMemberJoin: zhangxiaodeMacBook-Pro.local 192.168.31.222
+    2018/02/03 16:34:56 [WARN] serf: Failed to re-join any previously known node
+    2018/02/03 16:34:56 [INFO] agent: Started DNS server 127.0.0.1:8600 (tcp)
+    2018/02/03 16:34:56 [INFO] agent: Started DNS server 127.0.0.1:8600 (udp)
+    2018/02/03 16:34:56 [INFO] agent: Started HTTP server on 127.0.0.1:8500 (tcp)
+    2018/02/03 16:34:56 [INFO] agent: started state syncer
+    2018/02/03 16:34:56 [WARN] manager: No servers available
+    2018/02/03 16:34:56 [ERR] agent: failed to sync remote state: No known Consul servers
+    2018/02/03 16:34:57 [WARN] manager: No servers available
+    2018/02/03 16:34:57 [ERR] http: Request GET /v1/kv/config/account-service/?recurse&amp;wait=55s&amp;index=1, error: No known Consul servers from=127.0.0.1:54630
+</code></pre>
+<blockquote>
+<p>启动是启动了，但是尴尬的是报Err了。<br>对了，第一篇文章中有说道：Agent有Client 和 Server 两种模式<br>看来默认启动的方式是Client，所有一直报错没有可用服务器</p>
+</blockquote>
+<p>这个时候，就得好好看看上面，重新试下：</p>
+<pre><code>$ consul agent -server -ui -data-dir=/Users/michael/tmp_consul
+==&gt; Starting Consul agent...
+==&gt; Consul agent running!
+           Version: &#39;v1.0.3&#39;
+           Node ID: &#39;13042cd6-06ea-7f0a-4997-a2d2aecfe698&#39;
+         Node name: &#39;zhangxiaodeMacBook-Pro.local&#39;
+        Datacenter: &#39;dc1&#39; (Segment: &#39;&lt;all&gt;&#39;)
+            Server: true (Bootstrap: false)
+       Client Addr: [127.0.0.1] (HTTP: 8500, HTTPS: -1, DNS: 8600)
+      Cluster Addr: 192.168.31.222 (LAN: 8301, WAN: 8302)
+           Encrypt: Gossip: false, TLS-Outgoing: false, TLS-Incoming: false
+
+==&gt; Log data will now stream in as it occurs:
+
+    2018/02/03 16:45:43 [INFO] raft: Initial configuration (index=0): []
+    2018/02/03 16:45:43 [INFO] raft: Node at 192.168.31.222:8300 [Follower] entering Follower state (Leader: &quot;&quot;)
+    2018/02/03 16:45:43 [INFO] serf: EventMemberJoin: zhangxiaodeMacBook-Pro.local.dc1 192.168.31.222
+    2018/02/03 16:45:43 [WARN] serf: Failed to re-join any previously known node
+    2018/02/03 16:45:43 [INFO] serf: EventMemberJoin: zhangxiaodeMacBook-Pro.local 192.168.31.222
+    2018/02/03 16:45:43 [INFO] consul: Adding LAN server zhangxiaodeMacBook-Pro.local (Addr: tcp/192.168.31.222:8300) (DC: dc1)
+    2018/02/03 16:45:43 [INFO] consul: Handled member-join event for server &quot;zhangxiaodeMacBook-Pro.local.dc1&quot; in area &quot;wan&quot;
+    2018/02/03 16:45:43 [INFO] agent: Started DNS server 127.0.0.1:8600 (udp)
+    2018/02/03 16:45:43 [INFO] agent: Started DNS server 127.0.0.1:8600 (tcp)
+    2018/02/03 16:45:43 [INFO] agent: Started HTTP server on 127.0.0.1:8500 (tcp)
+    2018/02/03 16:45:43 [INFO] agent: started state syncer
+    2018/02/03 16:45:49 [WARN] raft: no known peers, aborting election
+    2018/02/03 16:45:50 [ERR] agent: failed to sync remote state: No cluster leader
+</code></pre><p>我去，有报错：failed to sync remote state: No cluster leader</p>
+<p>回想一下，第一篇文章中的构架图，在一个DC(中)需要有一个leader-server</p>
+<p>我现在的场景，就是在本地玩玩，那么相当于是：一个数据中只有一个server,需要把自己作为leader</p>
+<p>这里有一个参数可用</p>
+<blockquote>
+<p><a name="锚点名称">-bootstrap</a> - This flag is used to control if a server is in “bootstrap” mode. It is important that no more than one server per datacenter be running in this mode. Technically, a server in bootstrap mode is allowed to self-elect as the Raft leader. It is important that only a single node is in this mode; otherwise, consistency cannot be guaranteed as multiple nodes are able to self-elect. It is not recommended to use this flag after a cluster has been bootstrapped.</p>
+</blockquote>
+<p>稍作修改</p>
+<pre><code>$ consul agent -data-dir=/Users/michael/tmp_consul -server -bootstrap -ui -node=server1
+bootstrap = true: do not enable unless necessary
+==&gt; Starting Consul agent...
+==&gt; Consul agent running!
+           Version: &#39;v1.0.3&#39;
+           Node ID: &#39;b53bc378-a8f4-7242-2f92-2f8bdecbc931&#39;
+         Node name: &#39;server1&#39;
+        Datacenter: &#39;dc1&#39; (Segment: &#39;&lt;all&gt;&#39;)
+            Server: true (Bootstrap: true)
+       Client Addr: [127.0.0.1] (HTTP: 8500, HTTPS: -1, DNS: 8600)
+      Cluster Addr: 192.168.31.222 (LAN: 8301, WAN: 8302)
+           Encrypt: Gossip: false, TLS-Outgoing: false, TLS-Incoming: false
+
+==&gt; Log data will now stream in as it occurs:
+
+    2018/02/03 17:16:03 [INFO] raft: Initial configuration (index=1): [{Suffrage:Voter ID:b53bc378-a8f4-7242-2f92-2f8bdecbc931 Address:192.168.31.222:8300}]
+    2018/02/03 17:16:03 [INFO] raft: Node at 192.168.31.222:8300 [Follower] entering Follower state (Leader: &quot;&quot;)
+    2018/02/03 17:16:03 [INFO] serf: EventMemberJoin: server1.dc1 192.168.31.222
+    2018/02/03 17:16:03 [INFO] serf: EventMemberJoin: server1 192.168.31.222
+    2018/02/03 17:16:03 [INFO] consul: Handled member-join event for server &quot;server1.dc1&quot; in area &quot;wan&quot;
+    2018/02/03 17:16:03 [INFO] agent: Started DNS server 127.0.0.1:8600 (udp)
+    2018/02/03 17:16:03 [INFO] consul: Adding LAN server server1 (Addr: tcp/192.168.31.222:8300) (DC: dc1)
+    2018/02/03 17:16:03 [INFO] agent: Started DNS server 127.0.0.1:8600 (tcp)
+    2018/02/03 17:16:03 [INFO] agent: Started HTTP server on 127.0.0.1:8500 (tcp)
+    2018/02/03 17:16:03 [INFO] agent: started state syncer
+    2018/02/03 17:16:08 [WARN] raft: Heartbeat timeout from &quot;&quot; reached, starting election
+    2018/02/03 17:16:08 [INFO] raft: Node at 192.168.31.222:8300 [Candidate] entering Candidate state in term 2
+    2018/02/03 17:16:08 [INFO] raft: Election won. Tally: 1
+    2018/02/03 17:16:08 [INFO] raft: Node at 192.168.31.222:8300 [Leader] entering Leader state
+    2018/02/03 17:16:08 [INFO] consul: cluster leadership acquired
+    2018/02/03 17:16:08 [INFO] consul: New leader elected: server1
+    2018/02/03 17:16:08 [INFO] consul: member &#39;server1&#39; joined, marking health alive
+    2018/02/03 17:16:09 [INFO] agent: Synced node info
+</code></pre><p>终于是跑起来了，<a href="http://localhost:8500/也能访问了" target="_blank" rel="noopener">http://localhost:8500/也能访问了</a></p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://www.consul.io/docs/commands/index.html" target="_blank" rel="noopener">Consul Commands (CLI)</a></p>
+<p><a href="http://www.ymq.io/2017/11/26/spring-cloud-consul/" target="_blank" rel="noopener">Spring Cloud（二）Consul 服务治理实现</a></p>
+<p><a href="http://xiaoquqi.github.io/blog/2015/12/07/consul-installation/" target="_blank" rel="noopener">Consul的安装方法</a></p>
+<p><a href="http://tonybai.com/2015/07/06/implement-distributed-services-registery-and-discovery-by-consul/" target="_blank" rel="noopener">使用consul实现分布式服务注册和发现</a></p>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

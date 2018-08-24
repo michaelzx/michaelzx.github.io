@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>重拾Angular（一）Angular CLI - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/前端" title="前端">前端</a>
+                    
+                        <a class="tag" href="/tags/Angular" title="Angular">Angular</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>重拾Angular（一）Angular CLI</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-06-29
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>Angular CLI 是 Angular 提供的一个命令行工具，可以帮助我们来快速初始化、开发、测试、打包（可能不仅限于此四个方面）Angular应用。</p>
+<p>独立官网地址：<a href="https://cli.angular.io/" target="_blank" rel="noopener">https://cli.angular.io/</a></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><pre><code class="bash">npm install -g @angular/cli
+</code></pre>
+<h1 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h1><p>如果要把Angular Cli更新的到一个新的版本，需要更新两个地方：<code>全局</code>、<code>项目</code></p>
+<p>全局</p>
+<pre><code class="bash">npm uninstall -g @angular/cli
+npm cache verify
+# if npm version is &lt; 5 then use `npm cache clean`
+npm install -g @angular/cli@latest
+</code></pre>
+<p>项目</p>
+<pre><code>rm -rf node_modules dist # use rmdir /S/Q node_modules dist in Windows Command Prompt; use rm -r -fo node_modules,dist in Windows PowerShell
+npm install --save-dev @angular/cli@latest
+npm install
+</code></pre><h1 id="我当前的版本"><a href="#我当前的版本" class="headerlink" title="我当前的版本"></a>我当前的版本</h1><p>先明确下版本</p>
+<pre><code class="bash">~ $ ng -v
+
+     _                      _                 ____ _     ___
+    / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
+   / △ \ | &#39;_ \ / _` | | | | |/ _` | &#39;__|   | |   | |    | |
+  / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
+ /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
+                |___/
+
+
+Angular CLI: 6.0.8
+Node: 8.11.1
+OS: darwin x64
+Angular:
+...
+
+Package                      Version
+------------------------------------------------------
+@angular-devkit/architect    0.6.8
+@angular-devkit/core         0.6.8
+@angular-devkit/schematics   0.6.8
+@schematics/angular          0.6.8
+@schematics/update           0.6.8
+rxjs                         6.2.1
+typescript                   2.7.2
+</code></pre>
+<h1 id="ng-new"><a href="#ng-new" class="headerlink" title="ng new"></a>ng new</h1><blockquote>
+<p>作用：创建一个已被初始化的Angular应用</p>
+</blockquote>
+<p>命令选项</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--collection</code> <code>-c</code></td>
+<td>指定工程模板<code>属于高阶操作，暂不知道如何使用</code></td>
+</tr>
+<tr>
+<td><code>--directory</code></td>
+<td>指定新项目创建的目录名</td>
+</tr>
+<tr>
+<td><code>--dryRun</code> <code>-d</code></td>
+<td>不生成实际文件<code>只是让你看下哪些文件将会生成</code></td>
+</tr>
+<tr>
+<td><code>--force</code> <code>-f</code></td>
+<td>强制覆盖文件<code>默认情况下如果文件已经存在创建过程为中断</code></td>
+</tr>
+<tr>
+<td><code>--inline-style</code> <code>-s</code></td>
+<td>指定使用行内样式</td>
+</tr>
+<tr>
+<td><code>--inline-template</code> <code>-t</code></td>
+<td>指定使用行内模板</td>
+</tr>
+<tr>
+<td><code>--new-project-root</code></td>
+<td>指定新项目创建的路径</td>
+</tr>
+<tr>
+<td><code>--prefix</code> <code>-p</code></td>
+<td>指定selector前缀</td>
+</tr>
+<tr>
+<td><code>--routing</code></td>
+<td>生成时自动包含<code>路由模块</code></td>
+</tr>
+<tr>
+<td><code>--skip-git</code> <code>-g</code></td>
+<td>不生成初始化git仓库</td>
+</tr>
+<tr>
+<td><code>--skip-install</code></td>
+<td>不安装依赖</td>
+</tr>
+<tr>
+<td><code>--skip-tests</code> <code>-S</code></td>
+<td>不创建测试文件</td>
+</tr>
+<tr>
+<td><code>--style</code></td>
+<td>默认值<code>css</code>,可选值<code>sass</code>、<code>less</code></td>
+</tr>
+<tr>
+<td><code>--verbose</code> <code>-v</code></td>
+<td>显示详细运行日志<code>试了下似乎加不加没什么区别</code></td>
+</tr>
+<tr>
+<td><code>--view-encapsulation</code></td>
+<td>指定<a href="https://angular.cn/guide/component-styles#view-encapsulation" target="_blank" rel="noopener">视图的封装模式</a></td>
+</tr>
+</tbody>
+</table>
+<p>默认情况下组件<code>@Component</code>是这样的：</p>
+<pre><code>@Component({
+  selector: &#39;app-root&#39;,
+  templateUrl: &#39;./app.component.html&#39;,
+  styleUrls: [&#39;./app.component.css&#39;]
+})
+</code></pre><p>如果，使用了<code>-s</code>、<code>-t</code>后，是这样子的：</p>
+<pre><code class="TypeScript">@Component({
+  selector: &#39;app-root&#39;,
+  template: `
+    &lt;h1&gt;Tour of Heroes&lt;/h1&gt;
+    &lt;app-hero-main [hero]=&quot;hero&quot;&gt;&lt;/app-hero-main&gt;
+  `,
+  styles: [&#39;h1 { font-weight: normal; }&#39;]
+})
+</code></pre>
+<p>如果，使用了<code>-p zx</code>后，是这样子的：</p>
+<pre><code>@Component({
+  selector: &#39;zx-root&#39;,
+  templateUrl: &#39;./app.component.html&#39;,
+  styleUrls: [&#39;./app.component.css&#39;]
+})
+</code></pre><h1 id="ng-generate"><a href="#ng-generate" class="headerlink" title="ng generate"></a>ng generate</h1><blockquote>
+<p>代码生成神器，能会是开发过程中，使用最频繁的一个命令</p>
+</blockquote>
+<h2 id="常规用法"><a href="#常规用法" class="headerlink" title="常规用法"></a>常规用法</h2><p><code>ng generate component &lt;name&gt; [options]</code>：生成一个组件<br><code>ng generate module &lt;name&gt; [options]</code>：生成一个模块<br><code>ng generate directive &lt;name&gt; [options]</code>：生成一个指令<br><code>ng generate class &lt;name&gt; [options]</code>：生成一个类<br><code>ng generate guard &lt;name&gt; [options]</code>：生成一个守卫<br><code>ng generate interface &lt;name&gt; [options]</code>：生成一个接口<br><code>ng generate enum &lt;name&gt; [options]</code>：生成一个枚举<br><code>ng generate pipe &lt;name&gt; [options]</code>：生成一个管道<br><code>ng generate service &lt;name&gt; [options]</code>：生成一个服务</p>
+<h2 id="快捷用法"><a href="#快捷用法" class="headerlink" title="快捷用法"></a>快捷用法</h2><p><code>ng g c &lt;name&gt; [options]</code>：生成一个组件<br><code>ng g m &lt;name&gt; [options]</code>：生成一个模块<br><code>ng g d &lt;name&gt; [options]</code>：生成一个指令<br><code>ng g cl &lt;name&gt; [options]</code>：生成一个类<br><code>ng g g &lt;name&gt; [options]</code>：生成一个守卫<br><code>ng g i &lt;name&gt; [options]</code>：生成一个接口<br><code>ng g e &lt;name&gt; [options]</code>：生成一个枚举<br><code>ng g p &lt;name&gt; [options]</code>：生成一个管道<br><code>ng g s &lt;name&gt; [options]</code>：生成一个服务</p>
+<p>option其他大同小异，接下来就来罗列一下，备查</p>
+<h2 id="component-选项"><a href="#component-选项" class="headerlink" title="component-选项"></a>component-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--inline-style</code> (alias: <code>-s</code>)：使用行内有样式<br><code>--inline-template</code> (alias: <code>-t</code>)：使用行内模板<br><code>--view-encapsulation</code> (alias: <code>-v</code>)：视图的封装模式，<a href="https://angular.cn/api/core/ViewEncapsulation" target="_blank" rel="noopener">ViewEncapsulation</a><br><code>--change-detection</code> (alias: <code>-c</code>)：指定变化检查策略，<a href="https://angular.cn/api/core/ChangeDetectionStrategy" target="_blank" rel="noopener">ChangeDetectionStrategy</a><br><code>--prefix</code> (alias: <code>-p</code>)：指定组件指令选择器前缀<br><code>--styleext</code>：指定组件样式文件名后缀，暂不清楚意义何在<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--skip-import</code>：不会自动import到模块<br><code>--selector</code>：指定指令选择器<br><code>--module</code> (alias: <code>-m</code>)：在哪个module中声明(import)<br><code>--export</code>：组件导入的模块，是否export组件</p>
+<h2 id="module-选项"><a href="#module-选项" class="headerlink" title="module-选项"></a>module-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--routing</code>：生成的时候包含routing<br><code>--routing-scope</code>：routing的组用于<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--module</code> (alias: <code>-m</code>)：在哪个module中声明(import)</p>
+<h2 id="directive-选项"><a href="#directive-选项" class="headerlink" title="directive-选项"></a>directive-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--prefix</code> (alias: <code>-p</code>)：指定指令选择器前缀<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--skip-import</code>：不会自动import到模块<br><code>--selector</code>：指定指令选择器<br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--module</code> (alias: <code>-m</code>)：在哪个module中声明(import)<br><code>--export</code>：组件导入的模块，是否export组件</p>
+<h2 id="class-选项"><a href="#class-选项" class="headerlink" title="class-选项"></a>class-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--type</code>：指定class文件类型，name.<code>type</code>.ts</p>
+<h2 id="guard-选项"><a href="#guard-选项" class="headerlink" title="guard-选项"></a>guard-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--module</code> (alias: <code>-m</code>)：在哪个module中声明(import)<br><code>--project</code>：项目名称</p>
+<h2 id="interface-选项"><a href="#interface-选项" class="headerlink" title="interface-选项"></a>interface-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--prefix</code>：前缀，文件<code>name.ts</code>,直接接口名称是<code>prefixName</code></p>
+<h2 id="enum-选项"><a href="#enum-选项" class="headerlink" title="enum-选项"></a>enum-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称</p>
+<h2 id="pipe-选项"><a href="#pipe-选项" class="headerlink" title="pipe-选项"></a>pipe-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code><br><code>--skip-import</code>：不会自动import到模块<br><code>--module</code> (alias: <code>-m</code>)：在哪个module中声明(import)<br><code>--export</code>：组件导入的模块，是否export组件</p>
+<h2 id="service-选项"><a href="#service-选项" class="headerlink" title="service-选项"></a>service-选项</h2><p><code>--dry-run</code> (alias: <code>-d</code>)：不生成实际文件<br><code>--force</code> (alias: <code>-f</code>)：强制覆盖文件<br><code>--project</code>：项目名称<br><code>--flat</code>：不生成独立目录，直接生成在<code>src/app</code>下<br><code>--spec</code>：是否生成单元测试文件，默认<code>true</code>,可选<code>false</code></p>
+<h1 id="ng-serve"><a href="#ng-serve" class="headerlink" title="ng serve"></a>ng serve</h1><blockquote>
+<p>作用：构建应用，并本地web开发服务器</p>
+</blockquote>
+<pre><code>ng serve [options]
+</code></pre><p>常用的options:</p>
+<p><code>--open</code> (alias: <code>-o</code>)：直接在浏览器中打开<br><code>--aot</code>：使用<a href="https://segmentfault.com/a/1190000008739157" target="_blank" rel="noopener">AOT编译</a><br><code>--prod</code>：按照生产环境配置启动</p>
+<p>其他参见<code>ng serve --help</code></p>
+<h1 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h1><p><code>ng build</code><br><code>ng lint</code><br><code>ng test</code><br><code>ng e2e</code><br><code>ng get/ng set</code><br><code>ng doc</code><br><code>ng xi18n</code><br><code>ng update</code></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>由于精力有限，，得先往下学习Angular的其他部分了。</p>
+<p>在了解Angular CLI的过程中，也有零零碎碎的了解到关于Angular相关的一些小知识点。</p>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

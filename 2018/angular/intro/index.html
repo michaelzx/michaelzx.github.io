@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>重拾Angular（序） - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/前端" title="前端">前端</a>
+                    
+                        <a class="tag" href="/tags/Angular" title="Angular">Angular</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>重拾Angular（序）</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-06-26
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="初识AngularJS"><a href="#初识AngularJS" class="headerlink" title="初识AngularJS"></a>初识AngularJS</h1><p>第一次认识它，记得是在2015年的时候。<code>1.x</code>时代，它叫<code>AngularJs</code>。因为Google出品，而且看到阿里云的控制台也是基于它构建的。</p>
+<p>让我心潮澎湃，激动不已，立刻学习实践，并尝试投入生产。可以说是它，让我又重新认识了前端。</p>
+<h1 id="Angular横空出世"><a href="#Angular横空出世" class="headerlink" title="Angular横空出世"></a>Angular横空出世</h1><p>但是到16年的时候，<code>2.x</code>时代来临了。为了便于和<code>1.x</code>的版本作区分，命名上去掉了Js，变成了：<code>Angular</code></p>
+<p>为啥要改名换姓？因为它是一次<code>完完全全的重构</code>😂</p>
+<p><code>2.x</code>后，指定使用<code>TypeScript</code>，作为开发语言。虽然，我有后端开发的基础，从语义上看看，完全是能理解的。但是，每种编程语言都有其特性，肯定还是需要花时间去加深了解。</p>
+<p>另外，新版本的开发流程和逻辑，肯定还要再重新学习和实践。</p>
+<p>总的来说，啥都要从头开始学。<code>辛辛苦苦几十年，一夜回到解放前</code>，对，就是这种感觉。</p>
+<p>已至此，我就开始转投其他框架阵营，先是<code>React</code>,然后是<code>Vue</code></p>
+<h1 id="AngularJS现状"><a href="#AngularJS现状" class="headerlink" title="AngularJS现状"></a>AngularJS现状</h1><p>当时出<code>2.x</code>的时候，官方说不会抛弃<code>1.x</code>，将继续更新和维护。但是明白人都看得出，既然都新起炉灶了，它终将会被抛弃在历史的河流之中。</p>
+<p>今天，还特地去看了下 <a href="https://angularjs.org/" target="_blank" rel="noopener">https://angularjs.org/</a> ，发现官网上有一句话：</p>
+<blockquote>
+<p>AngularJS will be moving to Long Term Support (LTS) mode on July 1st 2018</p>
+</blockquote>
+<p>这意味着啥？意味着：开发团队并不会继续发布新的特性，最多就是修修bug而已，而且极有可能只是针对重大bug！</p>
+<p>不过也是非常敬佩Google的做事风格，兑现了当初的承诺。不至于让已经在使用此技术的开发者陷入僵局，起码是能保证稳定。</p>
+<h1 id="Angular现状"><a href="#Angular现状" class="headerlink" title="Angular现状"></a>Angular现状</h1><p><code>Angular2</code>之后，Google开发团队又相继推出了<code>Angular4</code>、<code>Angular5</code></p>
+<p>这些版本，其实都是基于2.X的升级版，不必惊慌😀</p>
+<p>现在的版本是：<code>Angular6</code>，预计今年年底有望出到<code>Angular7</code></p>
+<p>有意思的是，这中间木有<code>Angular3</code>。据说是为了统一核心类库的版本号，避免日后混淆，所有跳过了这个版本。</p>
+<h1 id="重新认识Angular，why？"><a href="#重新认识Angular，why？" class="headerlink" title="重新认识Angular，why？"></a>重新认识Angular，why？</h1><p>感觉<code>相对于React、Vue</code>，Angular更像一套<code>完整的解决方案</code>，其本身就是一套最佳实践方案。而且它提供了非常良好的<code>编程风格指南</code>，不仅告诉你要怎么写，而且还告诉你为何要这么写。在团队协作开发的层面的帮助，让我很是期待。</p>
+<blockquote>
+<p>Angular似乎散发着浓厚的<code>构架之美</code>，在冥冥之中吸引着我。</p>
+</blockquote>
+<h1 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h1><p>知乎上，经常看到<code>Angular</code>、<code>React</code>、<code>Vue</code>的使用者在撕逼，争论孰强孰弱。A能实现的，B都能实现的情况下，其实我感觉没啥意思，萝卜青菜各有所爱。</p>
+<p>举个例子，后端的<code>Java</code>框架，我一开始用<code>JFinal</code>，现在在用<code>Spring Boot(Cloud)</code>。</p>
+<p>在用<code>JFinal</code>的时候，享受着他的小而美，但同时又眼馋于Spring的各种成熟解决方案。</p>
+<p>在用了<code>Spring Boot</code>之后，又怀念<code>JFinal</code>的轻量级。JFinal启动一个下几秒钟，spring boot少说也得十几二十秒）</p>
+<blockquote>
+<p>任何技术方案，都会有他解决问题的场景，不需要太纠结。</p>
+</blockquote>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

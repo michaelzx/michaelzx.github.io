@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>SpringBoot笔记(一) Web - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/SpringBoot" title="SpringBoot">SpringBoot</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>SpringBoot笔记(一) Web</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2017-12-11
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="核心依赖包"><a href="#核心依赖包" class="headerlink" title="核心依赖包"></a>核心依赖包</h1><pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h1 id="请求处理"><a href="#请求处理" class="headerlink" title="请求处理"></a>请求处理</h1><blockquote>
+<p>主要列举下几个核心注解</p>
+</blockquote>
+<h2 id="Contrller"><a href="#Contrller" class="headerlink" title="@Contrller"></a>@Contrller</h2><ul>
+<li>位置：类</li>
+<li>作用：表示这个类是有一个控制器</li>
+<li>说明：一般是需要搭配一个<code>@RequestMapping</code>注解，配置这个控制器的路径</li>
+<li>注意：在没有<code>@ResponseBody</code>搭配的情况下，需要增加模板引擎依赖否则会报错</li>
+</ul>
+<h2 id="ResponseBody"><a href="#ResponseBody" class="headerlink" title="@ResponseBody"></a>@ResponseBody</h2><ul>
+<li>位置：类或方法</li>
+<li>作用：告诉控制器，这个Action甚至整个Controller，返回的对象都将会序列化成JSON，并回传给HttpResponse</li>
+</ul>
+<h2 id="RestController"><a href="#RestController" class="headerlink" title="@RestController"></a>@RestController</h2><ul>
+<li>位置：类</li>
+<li>作用：快捷注解，相当于给类添加<code>@Contrller</code>+<code>@ResponseBody</code>，2个注解</li>
+</ul>
+<h2 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h2><ul>
+<li>位置：类或方法</li>
+<li><p>作用：几个参数及作用</p>
+</li>
+<li><p>value：指定请求的实际地址，指定的地址可以是URI Template 模式（后面将会说明）；</p>
+</li>
+<li>method：指定请求的method类型， GET、POST、PUT、DELETE等；</li>
+<li>consumes：指定处理请求的提交内容类型（Content-Type），例如application/json, text/html;</li>
+<li>produces：指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回；</li>
+<li>params：指定request中必须包含某些参数值是，才让该方法处理。</li>
+<li>headers：指定request中必须包含某些指定的header值，才能让该方法处理请求。</li>
+</ul>
+<h2 id="GetMapping"><a href="#GetMapping" class="headerlink" title="@GetMapping"></a>@GetMapping</h2><ul>
+<li>位置：类或方法</li>
+<li>作用：快捷注解，作用同<code>@RequestMapping</code>,只是限定了method=GET</li>
+</ul>
+<h2 id="PostMapping"><a href="#PostMapping" class="headerlink" title="@PostMapping"></a>@PostMapping</h2><ul>
+<li>位置：类或方法</li>
+<li>作用：快捷注解，作用同<code>@RequestMapping</code>,只是限定了method=POST</li>
+</ul>
+<h1 id="获取请求数据"><a href="#获取请求数据" class="headerlink" title="获取请求数据"></a>获取请求数据</h1><h2 id="获取常规请求参数"><a href="#获取常规请求参数" class="headerlink" title="获取常规请求参数"></a>获取常规请求参数</h2><blockquote>
+<p>这里指的是Query String和Form中的参数</p>
+</blockquote>
+<ul>
+<li>Form参数只有在<code>POST</code>请求中才会获取</li>
+<li>如果在<code>POST</code>请求中，Query String和Form，存在相同的参数，则最后会取Form的参数</li>
+</ul>
+<p>例如：获取以下请求中的userName参数</p>
+<pre><code>/user/update/123?userName=zhangshan
+</code></pre><p>代码示例：</p>
+<pre><code class="java">import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(value = &quot;/user&quot;)
+public class TestController {
+
+    @PostMapping(value = &quot;/update/{userId}&quot;)
+    public String update(@RequestParam String userName){
+        return userName;
+    }
+}
+</code></pre>
+<h2 id="获取url中的path变量"><a href="#获取url中的path变量" class="headerlink" title="获取url中的path变量"></a>获取url中的path变量</h2><ol>
+<li>需要预先在<code>@RequestMapping</code>中定义</li>
+<li>给参数加上@PathVariable</li>
+</ol>
+<p>例如：获取以下请求url中的123</p>
+<pre><code>/user/update/123?userName=zhangshan
+</code></pre><p>代码示例：</p>
+<pre><code class="java">import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(value = &quot;/user&quot;)
+public class TestController {
+    @PostMapping(value = &quot;/update/{userId}&quot;)
+    public String update(
+            @RequestParam String userName,
+            @PathVariable String userId
+    ){
+        return userId+&quot;-&quot;+userName;
+    }
+}
+</code></pre>
+<h2 id="将请求参数绑定到java对象上"><a href="#将请求参数绑定到java对象上" class="headerlink" title="将请求参数绑定到java对象上"></a>将请求参数绑定到java对象上</h2><p>TestBean.java</p>
+<pre><code class="java">import lombok.Data;
+
+@Data
+public class TestBean {
+    private Integer userId;
+    private String userName;
+}
+</code></pre>
+<p>TestController.java</p>
+<pre><code class="java">import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(value = &quot;/user&quot;)
+public class TestController {
+
+    @PostMapping(value = &quot;/update/{userId}&quot;)
+    public String update(
+        TestBean testBean
+    ){
+        return testBean.getUserId()+&quot;-&quot;+testBean.getUserName();
+    }
+}
+</code></pre>
+<p>经过测试，直接将请求参数绑定到java对象。优先级如下：</p>
+<ol>
+<li>url的query参数</li>
+<li>form的参数</li>
+<li>url的path参数</li>
+</ol>
+<p>如果多处存在相同名称参数，优先级高的会覆盖优先级低的</p>
+<h2 id="获取json请求，并绑定到java对象"><a href="#获取json请求，并绑定到java对象" class="headerlink" title="获取json请求，并绑定到java对象"></a>获取json请求，并绑定到java对象</h2><pre><code class="java">package com.example.demo;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping(value = &quot;/user&quot;)
+public class TestController {
+
+    @PostMapping(value = &quot;/update/{userId}&quot;)
+    public String update(
+        @RequestBody TestBean testBean
+    ){
+        return testBean.getUserId()+&quot;-&quot;+testBean.getUserName();
+    }
+}
+</code></pre>
+<p><strong>@RequestBody</strong></p>
+<ul>
+<li>该注解，可以将客户端，发起post请求时，将request body中的json，直接映射成java对象</li>
+<li>json可以拿过来提交嵌套结构的对象，降低参数接收的复杂度</li>
+</ul>
+<h1 id="数据校验"><a href="#数据校验" class="headerlink" title="数据校验"></a>数据校验</h1><h2 id="Valid-和-Validated"><a href="#Valid-和-Validated" class="headerlink" title="@Valid 和 @Validated"></a>@Valid 和 @Validated</h2><p><code>@Valid</code></p>
+<ul>
+<li>所在包：javax.validation.Valid</li>
+<li>属于JSR-303规范</li>
+</ul>
+<p><code>@Validated</code></p>
+<ul>
+<li>所在包：org.springframework.validation.annotation.Validated</li>
+<li>@Validated是@Valid的一次封装，不是规范。</li>
+<li><code>@Validated</code>相对于<code>@Valid</code>,增加了分组校验</li>
+<li><strong>在spirng开发中，我想应该更加推荐使用</strong></li>
+</ul>
+<h2 id="基本验证规则"><a href="#基本验证规则" class="headerlink" title="基本验证规则"></a>基本验证规则</h2><table>
+<thead>
+<tr>
+<th>注解</th>
+<th>可校验类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@AssertFalse</td>
+<td>Boolean,boolean</td>
+<td>验证注解的元素值是false</td>
+</tr>
+<tr>
+<td>@AssertTrue</td>
+<td>Boolean,boolean</td>
+<td>验证注解的元素值是true</td>
+</tr>
+<tr>
+<td>@NotNull</td>
+<td>任意类型</td>
+<td>验证注解的元素值不是null</td>
+</tr>
+<tr>
+<td>@Null</td>
+<td>任意类型</td>
+<td>验证注解的元素值是null</td>
+</tr>
+<tr>
+<td>@Min(value=值)</td>
+<td>BigDecimal，BigInteger, byte,short, int, long，等任何Number或CharSequence（存储的是数字）子类型</td>
+<td>验证注解的元素值大于等于@Min指定的value值</td>
+</tr>
+<tr>
+<td>@Max（value=值）</td>
+<td>和@Min要求一样</td>
+<td>验证注解的元素值小于等于@Max指定的value值</td>
+</tr>
+<tr>
+<td>@DecimalMin(value=值)</td>
+<td>和@Min要求一样</td>
+<td>验证注解的元素值大于等于@ DecimalMin指定的value值</td>
+</tr>
+<tr>
+<td>@DecimalMax(value=值)</td>
+<td>和@Min要求一样</td>
+<td>验证注解的元素值小于等于@ DecimalMax指定的value值</td>
+</tr>
+<tr>
+<td>@Digits(integer=整数位数, fraction=小数位数)</td>
+<td>和@Min要求一样</td>
+<td>验证注解的元素值的整数位数和小数位数上限</td>
+</tr>
+<tr>
+<td>@Size(min=下限, max=上限)</td>
+<td>字符串、Collection、Map、数组等</td>
+<td>验证注解的元素值的在min和max（包含）指定区间之内，如字符长度、集合大小</td>
+</tr>
+<tr>
+<td>@Past</td>
+<td>java.util.Date,java.util.Calendar;Joda Time类库的日期类型</td>
+<td>验证注解的元素值（日期类型）比当前时间早</td>
+</tr>
+<tr>
+<td>@Future</td>
+<td>与@Past要求一样</td>
+<td>验证注解的元素值（日期类型）比当前时间晚</td>
+</tr>
+<tr>
+<td>@NotBlank</td>
+<td>CharSequence子类型</td>
+<td>验证注解的元素值不为空（不为null、去除首位空格后长度为0），不同于@NotEmpty，@NotBlank只应用于字符串且在比较时会去除字符串的首位空格</td>
+</tr>
+<tr>
+<td>@Length(min=下限, max=上限)</td>
+<td>CharSequence子类型</td>
+<td>验证注解的元素值长度在min和max区间内</td>
+</tr>
+<tr>
+<td>@NotEmpty</td>
+<td>CharSequence子类型、Collection、Map、数组</td>
+<td>验证注解的元素值不为null且不为空（字符串长度不为0、集合大小不为0）</td>
+</tr>
+<tr>
+<td>@Range(min=最小值, max=最大值)</td>
+<td>BigDecimal,BigInteger,CharSequence, byte, short, int, long等原子类型和包装类型</td>
+<td>验证注解的元素值在最小值和最大值之间</td>
+</tr>
+<tr>
+<td>@Email(regexp=正则表达式,flag=标志的模式)</td>
+<td>CharSequence子类型（如String）</td>
+<td>验证注解的元素值是Email，也可以通过regexp和flag指定自定义的email格式</td>
+</tr>
+<tr>
+<td>@Pattern(regexp=正则表达式,flag=标志的模式)</td>
+<td>String，任何CharSequence的子类型</td>
+<td>验证注解的元素值与指定的正则表达式匹配</td>
+</tr>
+<tr>
+<td>@Valid</td>
+<td>任何非原子类型</td>
+<td>指定递归验证关联的对象；如用户对象中有个地址对象属性，如果想在验证用户对象时一起验证地址对象的话，在地址对象上加@Valid注解即可级联验证</td>
+</tr>
+</tbody>
+</table>
+<h2 id="校验示例"><a href="#校验示例" class="headerlink" title="校验示例"></a>校验示例</h2><p>Book.java</p>
+<pre><code class="java">import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+
+@Data
+public class Book {
+    @NotNull(message = &quot;课本ID，不能为空&quot;)
+    private Integer bookId;
+    @NotBlank(message = &quot;课本名称，不能为空&quot;)
+    private String bookName;
+}
+</code></pre>
+<p>Stu.java</p>
+<pre><code class="java">import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+@Data
+public class Stu {
+
+    @NotNull(message = &quot;学号，不能为空&quot;)
+    private Integer stuId;
+
+
+    @NotNull(message = &quot;姓名，不能为空&quot;)
+    private String stuName;
+
+    @NotEmpty(message = &quot;课本列表，不能为空&quot;)
+    @Valid //有嵌套对象的验证时，必须加上这个，不然会失效
+    private List&lt;Book&gt; bookList;
+}
+</code></pre>
+<p>TestController.java</p>
+<pre><code class="java">import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(value = &quot;/user&quot;)
+public class TestController {
+
+    @PostMapping(value = &quot;/test&quot;)
+    public String test(@RequestBody @Validated Stu stu, BindingResult bindingResult) throws JsonProcessingException {
+        if (bindingResult.hasErrors()) {
+            return bindingResult.getFieldError().getDefaultMessage();
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return &quot;提交成功&quot; + mapper.writeValueAsString(stu);
+    }
+}
+</code></pre>
+<h1 id="302重定向"><a href="#302重定向" class="headerlink" title="302重定向"></a>302重定向</h1><pre><code class="java">@GetMapping(value = &quot;redirect&quot;)
+public void redirect(HttpServletResponse response) throws IOException {
+    response.sendRedirect(&quot;http://www.baidu.com&quot;);
+}
+</code></pre>
+<h1 id="控制器之间跳转"><a href="#控制器之间跳转" class="headerlink" title="控制器之间跳转"></a>控制器之间跳转</h1><pre><code class="java">@GetMapping(value = &quot;redirect2&quot;)
+public String redirect2() {
+    return &quot;redirect:/otherController/otherAction?param1=1&amp;param2=1&quot;;
+}
+</code></pre>
+<h1 id="自定义错误路由"><a href="#自定义错误路由" class="headerlink" title="自定义错误路由"></a>自定义错误路由</h1><p>ErrorConfig.java</p>
+<pre><code class="java">import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.web.servlet.ErrorPage;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+
+@Configuration
+public class ErrorConfig {
+    @Bean
+    public EmbeddedServletContainerCustomizer containerCustomizer(){
+        return container -&gt; {
+            container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST,&quot;/400&quot;));
+            container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR,&quot;/500&quot;));
+            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND,&quot;/404&quot;));
+            container.addErrorPages(new ErrorPage(HttpStatus.UNAUTHORIZED,&quot;/401&quot;));
+        };
+    }
+}
+</code></pre>
+<p>ErrorCtrl.java</p>
+<pre><code class="java">import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@RestController
+public class ErrorCtrl {
+    @RequestMapping(value = &quot;/500&quot;)
+    public String serverError(){
+        return &quot;500&quot;;
+    }
+    @RequestMapping(value = &quot;/400&quot;)
+    public String badRequest(){
+        return &quot;400&quot;;
+    }
+    @RequestMapping(value = &quot;/404&quot;)
+    public String notFound(){
+        return &quot;404&quot;;
+    }
+}
+</code></pre>
+<h1 id="添加拦截器"><a href="#添加拦截器" class="headerlink" title="添加拦截器"></a>添加拦截器</h1><h2 id="第一步：首先需要添加一个拦截器类"><a href="#第一步：首先需要添加一个拦截器类" class="headerlink" title="第一步：首先需要添加一个拦截器类"></a>第一步：首先需要添加一个拦截器类</h2><pre><code class="java">import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Component
+public class UrlPrintInterceptor implements HandlerInterceptor {
+
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println(request.getRequestURI());
+        return true;
+    }
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+
+    }
+}
+</code></pre>
+<p>3个需要实现的方法，就不细说了，百度一大堆。请自行了解。</p>
+<p>这里是一个很简单的拦截器，当请求进来的时候，把请求的uri打印出来。</p>
+<h2 id="第二部：添加一个WebMvc的配置类"><a href="#第二部：添加一个WebMvc的配置类" class="headerlink" title="第二部：添加一个WebMvc的配置类"></a>第二部：添加一个WebMvc的配置类</h2><pre><code class="java">import cn.cnvp.fw.saas.mch.web.interceptor.UrlInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+    @Bean
+    public HandlerInterceptor getUrlInterceptor(){
+        return new UrlInterceptor();
+    }
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(getUrlInterceptor())
+                .addPathPatterns(&quot;/**&quot;);
+    }
+}
+</code></pre>
+<p>添加注册，并指定拦截的路径。大功告成。</p>
+<h1 id="jar包外静态资源的访问"><a href="#jar包外静态资源的访问" class="headerlink" title="jar包外静态资源的访问"></a>jar包外静态资源的访问</h1><pre><code class="java">import cn.cnvp.hx.saas.tmp1.Application;
+import org.springframework.boot.system.ApplicationHome;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.IOException;
+
+@Configuration
+public class MvcConfig implements WebMvcConfigurer {
+    //获取运行环境目录
+    @Bean
+    public static String getJarDir() {
+        ApplicationHome home = new ApplicationHome(Application.class);
+        System.out.println(home.getDir());
+        try {
+            return home.getDir().getCanonicalPath();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+    //注意，一定要加上file:作为前缀。
+    //addResourceLocations还可以添加其他另外的资源定位方式
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        System.out.println(getJarDir());
+        registry.addResourceHandler(&quot;/**&quot;).addResourceLocations(&quot;file:&quot;+getJarDir()+&quot;/&quot;);
+        registry.addResourceHandler(&quot;/uploads/**&quot;).addResourceLocations(&quot;file:&quot;+getJarDir()+&quot;/upload&quot;);
+    }
+
+}
+</code></pre>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

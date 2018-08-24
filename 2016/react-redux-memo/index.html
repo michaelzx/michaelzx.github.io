@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>React Redux 备忘录 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/前端" title="前端">前端</a>
+                    
+                        <a class="tag" href="/tags/React" title="React">React</a>
+                    
+                        <a class="tag" href="/tags/Redux" title="Redux">Redux</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>React Redux 备忘录</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-08-25
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="Redux-中文文档"><a href="#Redux-中文文档" class="headerlink" title="Redux 中文文档"></a>Redux 中文文档</h1><p><a href="http://cn.redux.js.org/" target="_blank" rel="noopener">传送门</a></p>
+<h1 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h1><p>个人推荐<a href="https://github.com/erikras/ducks-modular-redux" target="_blank" rel="noopener">ducks-modular-redux</a>的构建方式，把actionTypes, actions, reducer放在同一个文件中，而不是各自分开算落在项目的各处。</p>
+<h1 id="给Action加点特效"><a href="#给Action加点特效" class="headerlink" title="给Action加点特效"></a>给Action加点特效</h1><h2 id="普通的Action"><a href="#普通的Action" class="headerlink" title="普通的Action"></a>普通的Action</h2><p>暂且称它为<code>pureAction</code>,够纯净</p>
+<pre><code class="javascript">export function Foo(valueA,valueB,valueC) {
+  ...
+  return {
+    type: SOME_NAME,
+    payload: values
+  }
+}
+</code></pre>
+<h2 id="普通的Action的缺陷"><a href="#普通的Action的缺陷" class="headerlink" title="普通的Action的缺陷"></a>普通的Action的缺陷</h2><ol>
+<li>Action内部无法感知State用于判断和计算</li>
+<li>如何支持单个或者多个有顺序的异步操作？</li>
+</ol>
+<h2 id="使用redux-thunk"><a href="#使用redux-thunk" class="headerlink" title="使用redux-thunk"></a>使用redux-thunk</h2><p>redux-thunk其实是redux的一个middleware</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><pre><code class="bash">npm install --save redux-thunk
+</code></pre>
+<pre><code class="javascript">import { createStore, applyMiddleware } from &#39;redux&#39;;
+import thunk from &#39;redux-thunk&#39;;
+import rootReducer from &#39;./reducers/index&#39;;
+
+// Note: this API requires redux@&gt;=3.1.0
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
+</code></pre>
+<p>更多可以参考<a href="http://cn.redux.js.org/docs/advanced/AsyncActions.html" target="_blank" rel="noopener">http://cn.redux.js.org/docs/advanced/AsyncActions.html</a></p>
+<h2 id="Action内感知State用于判断和计算"><a href="#Action内感知State用于判断和计算" class="headerlink" title="Action内感知State用于判断和计算"></a>Action内感知State用于判断和计算</h2><pre><code class="javascript">export function Foo() {
+  return (dispatch, getState) =&gt; {
+    const { stateA } = getState()
+
+    if (stateA % 2 === 0) {
+      return
+    }
+
+    dispatch(pureAction())
+  }
+}
+</code></pre>
+<h2 id="Action内异步请求"><a href="#Action内异步请求" class="headerlink" title="Action内异步请求"></a>Action内异步请求</h2><pre><code class="javascript">export function fetchPosts(subreddit) {
+
+  // Thunk middleware 知道如何处理函数。
+  // 这里把 dispatch 方法通过参数的形式传给函数，
+  // 以此来让它自己也能 dispatch action。
+
+  return function (dispatch) {
+
+    // 首次 dispatch：更新应用的 state 来通知
+    // API 请求发起了。
+
+    dispatch(requestPosts(subreddit))
+
+    // thunk middleware 调用的函数可以有返回值，
+    // 它会被当作 dispatch 方法的返回值传递。
+
+    // 这个案例中，我们返回一个等待处理的 promise。
+    // 这并不是 redux middleware 所必须的，但这对于我们而言很方便。
+
+    return fetch(`http://www.subreddit.com/r/${subreddit}.json`)
+      .then(response =&gt; response.json())
+      .then(json =&gt;
+
+        // 可以多次 dispatch！
+        // 这里，使用 API 请求结果来更新应用的 state。
+
+        dispatch(receivePosts(subreddit, json))
+      )
+
+      // 在实际应用中，还需要
+      // 捕获网络请求的异常。
+  }
+}
+</code></pre>
+<h1 id="Component中的简单使用"><a href="#Component中的简单使用" class="headerlink" title="Component中的简单使用"></a>Component中的简单使用</h1><pre><code class="javascript">import { connect } from &#39;react-redux&#39;
+import { toggleTodo } from &#39;../actions&#39;
+import TodoList from &#39;../components/TodoList&#39;
+
+const getVisibleTodos = (todos, filter) =&gt; {
+  switch (filter) {
+    case &#39;SHOW_ALL&#39;:
+      return todos
+    case &#39;SHOW_COMPLETED&#39;:
+      return todos.filter(t =&gt; t.completed)
+    case &#39;SHOW_ACTIVE&#39;:
+      return todos.filter(t =&gt; !t.completed)
+  }
+}
+
+const mapStateToProps = (state) =&gt; {
+  return {
+    todos: getVisibleTodos(state.todos, state.visibilityFilter)
+  }
+}
+
+const mapDispatchToProps = (dispatch) =&gt; {
+  return {
+    onTodoClick: (id) =&gt; {
+      dispatch(toggleTodo(id))
+    }
+  }
+}
+
+const VisibleTodoList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TodoList)
+
+export default VisibleTodoList
+</code></pre>
+<p>推荐文章：<a href="https://leozdgao.me/reacthe-reduxde-qiao-jie-react-redux/" target="_blank" rel="noopener">React和Redux的连接react-redux</a></p>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

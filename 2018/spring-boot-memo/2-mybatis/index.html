@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>SpringBoot笔记(二) Mybatis - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/SpringBoot" title="SpringBoot">SpringBoot</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>SpringBoot笔记(二) Mybatis</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-01-16
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>相比JPA，还是感觉手写的SQL更直接和安心，有问题也知道去哪里找。</p>
+            </blockquote>
+            
+            <p><code>2018-06-13：现在基本上固定在使用Mybatis-Plus</code></p>
+<p>一开始的时候，是使用了一段时间JPA，感觉到后面业务复杂的时候，不够灵活。后来尝试了Mybits，感觉很棒，非常灵活和使用，而且还有现成的分页插件可以使用。</p>
+<h2 id="mybatis的基本使用"><a href="#mybatis的基本使用" class="headerlink" title="mybatis的基本使用"></a>mybatis的基本使用</h2><h3 id="准备数据库"><a href="#准备数据库" class="headerlink" title="准备数据库"></a>准备数据库</h3><p>a.创建数据库</p>
+<pre><code class="sql">CREATE DATABASE spring-boot-memo;
+</code></pre>
+<p>b.创建表</p>
+<pre><code class="sql">DROP TABLE IF EXISTS  `city`;
+CREATE TABLE `city` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT &#39;城市编号&#39;,
+  `province_id` int(10) unsigned  NOT NULL COMMENT &#39;省份编号&#39;,
+  `city_name` varchar(25) DEFAULT NULL COMMENT &#39;城市名称&#39;,
+  `description` varchar(25) DEFAULT NULL COMMENT &#39;描述&#39;,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+</code></pre>
+<p>c.插入数据</p>
+<pre><code class="sql">INSERT city VALUES (1 ,1,&#39;温岭市&#39;,&#39;BYSocket 的家在温岭。&#39;);
+
+</code></pre>
+<h3 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h3><p>pom.xml</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;!-- &lt;version&gt;5.1.21&lt;/version&gt; --&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.3.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><p><code>mysql-connector-java，不需要加版本号。</code></p>
+<blockquote>
+<p>被网上文章误导了，看了下官方示例，是不加版本号的。</p>
+</blockquote>
+<blockquote>
+<p>我之前加了，莫名其妙的会连不上本地数据库。</p>
+</blockquote>
+<h3 id="添加配置"><a href="#添加配置" class="headerlink" title="添加配置"></a>添加配置</h3><p>application.yml</p>
+<pre><code>spring:
+  datasource:
+    url: jdbc:mysql://服务器:端口/数据库名?useSSL=false&amp;autoReconnect=true&amp;allowMultiQueries=true
+    username: 用户名
+    password: 密码
+mybatis:
+  mapper-locations: classpath:mybatis-mapper/*Mapper.xml
+  typeAliasesPackage: cn.abc.first,cn.abc.second
+</code></pre><p>mapper-locations:可以使用通配符</p>
+<p>typeAliasesPackage：不可使用通配符，可以用<code>,;\t\n</code>任意一个进行分割，指定实体类所在包</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>1.在application入口添加<code>@MapperScan</code> 注解，扫描指定包下的mapper接口类</p>
+<pre><code class="java">package com.example.demo;
+
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@MapperScan(&quot;com.example.demo.mapper&quot;)
+public class DemoApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(DemoApplication.class, args);
+  }
+}
+</code></pre>
+<p>2.创建City实体类</p>
+<pre><code class="java">package com.example.demo.entity;
+
+import lombok.Data;
+
+@Data
+public class City {
+    private Long id;
+    private Long provinceId;
+    private String cityName;
+    private String description;
+}
+</code></pre>
+<blockquote>
+<p><code>@Data</code> 是 lombok的注解，简化了get、set代码</p>
+</blockquote>
+<p>3.创建mapper的接口类</p>
+<pre><code class="java">package com.example.demo.mapper;
+
+import com.example.demo.entity.City;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component
+public interface CityMapper {
+    List&lt;City&gt; list();
+}
+</code></pre>
+<blockquote>
+<p>增加<code>@Component</code>，可以方便在Service中使用自动装配</p>
+</blockquote>
+<p>4.创建mapper的xml配置文件</p>
+<pre><code class="java">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;com.example.demo.mapper.CityMapper&quot;&gt;
+
+    &lt;select id=&quot;list&quot; resultType=&quot;com.example.demo.entity.City&quot;&gt;
+        SELECT * FROM city;
+    &lt;/select&gt;
+
+&lt;/mapper&gt;
+</code></pre>
+<blockquote>
+<ol>
+<li>namespace = 映射的java接口类</li>
+<li>resultType = 查询结果映射的实体类</li>
+</ol>
+</blockquote>
+<p>5.创建Service</p>
+<pre><code class="java">package com.example.demo.service;
+
+import com.example.demo.entity.City;
+import com.example.demo.mapper.CityMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CityService {
+    @Autowired
+    private CityMapper cityMapper;
+
+    public List&lt;City&gt; getList() {
+        return cityMapper.list();
+    }
+}
+</code></pre>
+<p>6.创建控制器</p>
+<pre><code class="java">package com.example.demo.controller;
+
+
+import com.example.demo.entity.City;
+import com.example.demo.service.CityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/city&quot;)
+public class CityCtrl {
+    @Autowired
+    private CityService cityService;
+
+    @GetMapping(&quot;/list&quot;)
+    public List&lt;City&gt; list() {
+        return cityService.getList();
+    }
+}
+
+</code></pre>
+<p><strong>文件结构</strong></p>
+<p><img src="pics/mybatis-base.png" alt=""></p>
+<h2 id="Mybatis通用分页插件"><a href="#Mybatis通用分页插件" class="headerlink" title="Mybatis通用分页插件"></a>Mybatis通用分页插件</h2><p><a href="https://github.com/pagehelper/Mybatis-PageHelper" target="_blank" rel="noopener">github地址</a></p>
+<h3 id="添加依赖-1"><a href="#添加依赖-1" class="headerlink" title="添加依赖"></a>添加依赖</h3><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
+    &lt;artifactId&gt;pagehelper&lt;/artifactId&gt;
+    &lt;version&gt;1.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><p>使用方法很简单，只要在list之前加上<code>PageHelper.startPage(pageNum,pageSize);</code>即可</p>
+<p>例子</p>
+<pre><code class="java">public PageKit pageForAdmin(int pageNum,int pageSize,String title,Byte status) {
+    PageHelper.startPage(pageNum,pageSize);
+    List&lt;GoodsListItem&gt; list = goodsMapper.listForAdmin(title, status);
+    PageInfo&lt;GoodsListItem&gt; pageInfo = new PageInfo&lt;&gt;(list);
+    return new PageKit&lt;&gt;(pageInfo);
+}
+</code></pre>
+<p>最终返回的<code>pageInfo</code>就是包含分页数据的一个对象，此处<code>PageKit</code>，用来转换格式的一个类</p>
+<pre><code class="java">import com.github.pagehelper.PageInfo;
+
+import java.io.Serializable;
+import java.util.List;
+
+
+public class PageKit&lt;T&gt; implements Serializable {
+    //总记录数
+    private long total;
+    //总页数
+    private int pages;
+    //当前页
+    private int pageNum;
+    //每页的数量
+    private int pageSize;
+    //是否为第一页
+    private boolean isFirstPage = false;
+    //是否为最后一页
+    private boolean isLastPage = false;
+    //列表数据
+    private List&lt;T&gt; list;
+    public PageKit(PageInfo&lt;T&gt; pageInfo){
+        this.total = pageInfo.getTotal();
+        this.pages = pageInfo.getPages();
+        this.pageNum = pageInfo.getPageNum();
+        this.pageSize = pageInfo.getPageSize();
+        this.isFirstPage = pageInfo.isIsFirstPage();
+        this.isLastPage = pageInfo.isIsLastPage();
+        this.list = pageInfo.getList();
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public boolean getIsFirstPage() {
+        return isFirstPage;
+    }
+
+    public void setFirstPage(boolean firstPage) {
+        isFirstPage = firstPage;
+    }
+
+    public boolean getIsLastPage() {
+        return isLastPage;
+    }
+
+    public void setLastPage(boolean lastPage) {
+        isLastPage = lastPage;
+    }
+
+    public List&lt;T&gt; getList() {
+        return list;
+    }
+
+    public void setList(List&lt;T&gt; list) {
+        this.list = list;
+    }
+}
+
+</code></pre>
+<h2 id="嵌套对象的查询"><a href="#嵌套对象的查询" class="headerlink" title="嵌套对象的查询"></a>嵌套对象的查询</h2><p>示例</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org/DTD Mapper 3.0&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+&lt;mapper namespace=&quot;cn.cnvp.wsk.dlg.mybatis.mapper.DeliveryMapper&quot;&gt;
+    &lt;sql id=&quot;select_sql&quot;&gt;
+        SELECT
+            d.id,
+            d.no,
+            d.orderId,
+            o.type AS orderType,
+            CASE o.type
+            WHEN 1
+                THEN &#39;代理商订单&#39;
+            WHEN 2
+                THEN &#39;零售订单&#39;
+            ELSE &#39;未知类型&#39;
+            END AS orderTypeName,
+            d.deliveryName,
+            d.deliveryMobile,
+            d.deliveryRegionCode,
+            d.deliveryAddress,
+            d.timeCreate,
+            d.remark
+        FROM delivery d
+            LEFT JOIN `order` o ON o.id = d.orderId
+        WHERE 1=1
+    &lt;/sql&gt;
+    &lt;resultMap type=&quot;cn.cnvp.wsk.dlg.mybatis.entity.Delivery&quot; id=&quot;ListItem&quot;&gt;
+        &lt;id column=&quot;id&quot; property=&quot;id&quot; javaType=&quot;Integer&quot;/&gt;
+        &lt;result column=&quot;orderId&quot; property=&quot;orderId&quot; javaType=&quot;Integer&quot;/&gt;
+        &lt;result column=&quot;orderType&quot; property=&quot;orderType&quot; javaType=&quot;Byte&quot;/&gt;
+        &lt;result column=&quot;orderTypeName&quot; property=&quot;orderTypeName&quot; javaType=&quot;String&quot;/&gt;
+        &lt;result column=&quot;deliveryName&quot; property=&quot;deliveryName&quot; javaType=&quot;String&quot;/&gt;
+        &lt;result column=&quot;deliveryMobile&quot; property=&quot;deliveryMobile&quot; javaType=&quot;String&quot;/&gt;
+        &lt;result column=&quot;deliveryRegionCode&quot; property=&quot;deliveryRegionCode&quot; javaType=&quot;String&quot;/&gt;
+        &lt;result column=&quot;deliveryAddress&quot; property=&quot;deliveryAddress&quot; javaType=&quot;String&quot;/&gt;
+        &lt;result column=&quot;timeCreate&quot; property=&quot;timeCreate&quot; javaType=&quot;Date&quot;/&gt;
+
+        &lt;association property=&quot;expressCount&quot; javaType=&quot;java.lang.Integer&quot; column=&quot;id&quot; select=&quot;expressCount&quot;/&gt;
+        &lt;collection property=&quot;goodsList&quot; javaType=&quot;java.util.ArrayList&quot; column=&quot;id&quot;
+                    ofType=&quot;cn.cnvp.wsk.dlg.mybatis.entity.DeliveryGoods&quot; select=&quot;getGoodsList&quot;/&gt;
+    &lt;/resultMap&gt;
+    &lt;select id=&quot;expressCount&quot; resultType=&quot;java.lang.Integer&quot;&gt;
+        SELECT count(1)
+        FROM delivery_express
+        WHERE deliveryId = #{deliveryId}
+    &lt;/select&gt;
+    &lt;select id=&quot;getGoodsList&quot; resultMap=&quot;DeliveryGoods&quot;&gt;
+        SELECT
+            dg.num,
+            og.goodsTitle,
+            og.skuTitle
+        FROM delivery_goods dg
+            LEFT JOIN order_goods og ON og.id = dg.ogId
+        WHERE dg.deliveryId = #{deliveryId}
+    &lt;/select&gt;
+    &lt;select id=&quot;getAllList&quot; resultMap=&quot;ListItem&quot;&gt;
+        &lt;include refid=&quot;select_sql&quot;/&gt;
+        &lt;if test=&quot;timeStart != null&quot;&gt;&lt;![CDATA[AND DATEDIFF(d.timeCreate,#{timeStart})&gt;=0]]&gt;&lt;/if&gt;
+        &lt;if test=&quot;timeEnd != null&quot;&gt;&lt;![CDATA[AND DATEDIFF(d.timeCreate,#{timeEnd})&lt;=0]]&gt;&lt;/if&gt;
+        &lt;if test=&quot;type != null&quot;&gt;&lt;![CDATA[AND o.type=#{type}]]&gt;&lt;/if&gt;
+        &lt;if test=&quot;searchType != null and searchType != &#39;&#39; and searchWord != null and searchWord != &#39;&#39;&quot;&gt;
+            &lt;if test=&quot;searchType == &#39;orderNo&#39;&quot;&gt;
+                AND o.no LIKE  CONCAT(&#39;%&#39;,#{searchWord},&#39;%&#39; )
+            &lt;/if&gt;
+            &lt;if test=&quot;searchType == &#39;deliveryName&#39;&quot;&gt;
+                AND d.deliveryName LIKE  CONCAT(&#39;%&#39;,#{searchWord},&#39;%&#39; )
+            &lt;/if&gt;
+            &lt;if test=&quot;searchType == &#39;deliveryMobile&#39;&quot;&gt;
+                AND d.deliveryMobile LIKE  CONCAT(&#39;%&#39;,#{searchWord},&#39;%&#39; )
+            &lt;/if&gt;
+        &lt;/if&gt;
+        order by d.id desc
+    &lt;/select&gt;
+&lt;/mapper&gt;
+</code></pre><p>此处主要的就是<code>association</code>和<code>collection</code></p>
+<ul>
+<li><code>association</code>：表示一对一映射关联，可用来嵌套单个对象</li>
+<li><code>collection</code>：表示一对多映射关联，可用来嵌套一个列表对象</li>
+</ul>
+<p>另外，需要搭配<code>resultMap</code>来使用。</p>
+<h2 id="xml备忘"><a href="#xml备忘" class="headerlink" title="xml备忘"></a>xml备忘</h2><h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><pre><code class="java">int insert(@Param(&quot;user&quot;) User user);
+</code></pre>
+<pre><code class="xml">&lt;insert id=&quot;insert&quot;&gt;
+    INSERT INTO user
+    &lt;trim prefix=&quot;(&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot;&gt;
+        &lt;if test=&quot;user.id != null&quot;&gt; id, &lt;/if&gt;
+        &lt;if test=&quot;user.username != null&quot;&gt; username, &lt;/if&gt;
+        &lt;if test=&quot;user.password != null&quot;&gt; password, &lt;/if&gt;
+        &lt;if test=&quot;user.timeCreate != null&quot;&gt; time_create, &lt;/if&gt;
+        &lt;if test=&quot;user.timeExpired != null&quot;&gt; time_expired, &lt;/if&gt;
+        &lt;if test=&quot;user.nickName != null&quot;&gt; nick_name, &lt;/if&gt;
+        &lt;if test=&quot;user.adminRemark != null&quot;&gt; admin_remark, &lt;/if&gt;
+        &lt;if test=&quot;user.type != null&quot;&gt; type, &lt;/if&gt;
+    &lt;/trim&gt;
+    VALUES
+    &lt;trim prefix=&quot;(&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot;&gt;
+        &lt;if test=&quot;user.id != null&quot;&gt; #{user.id}, &lt;/if&gt;
+        &lt;if test=&quot;user.username != null&quot;&gt; #{user.username}, &lt;/if&gt;
+        &lt;if test=&quot;user.password != null&quot;&gt; #{user.password}, &lt;/if&gt;
+        &lt;if test=&quot;user.timeCreate != null&quot;&gt; #{user.timeCreate}, &lt;/if&gt;
+        &lt;if test=&quot;user.timeExpired != null&quot;&gt; #{user.timeExpired}, &lt;/if&gt;
+        &lt;if test=&quot;user.nickName != null&quot;&gt; #{user.nickName}, &lt;/if&gt;
+        &lt;if test=&quot;user.adminRemark != null&quot;&gt; #{user.adminRemark}, &lt;/if&gt;
+        &lt;if test=&quot;user.type != null&quot;&gt; #{user.type}, &lt;/if&gt;
+    &lt;/trim&gt;
+&lt;/insert&gt;
+</code></pre>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><blockquote>
+<p><a href="http://www.spring4all.com/article/145" target="_blank" rel="noopener">http://www.spring4all.com/article/145</a></p>
+<p><a href="http://blog.didispace.com/springbootmybatis/" target="_blank" rel="noopener">http://blog.didispace.com/springbootmybatis/</a></p>
+</blockquote>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

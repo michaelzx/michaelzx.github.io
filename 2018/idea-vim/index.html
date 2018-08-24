@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>IntelliJ IDEA vim插件(ideaVim) - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>IntelliJ IDEA vim插件(ideaVim)</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-08-24
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+<p>原文：<a href="https://www.cnblogs.com/zhaozihan/p/6297217.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhaozihan/p/6297217.html</a><br>cnblogs看起来太恶心，重新排版下，例子可以去这里看</p>
+</blockquote>
+<h1 id="IdeaVim简介"><a href="#IdeaVim简介" class="headerlink" title="IdeaVim简介"></a>IdeaVim简介</h1><p>IdeaVim是IntelliJ IDEA的一款插件，他提高了我们写代码的速度，对代码的跳转，查找也很友好。</p>
+<h2 id="安装位置"><a href="#安装位置" class="headerlink" title="安装位置"></a>安装位置</h2><p><img src="http://img.zhangxiao.org/ideaVim1.png" alt="xxx"></p>
+<h2 id="菜单位置"><a href="#菜单位置" class="headerlink" title="菜单位置"></a>菜单位置</h2><p><img src="http://img.zhangxiao.org/ideaVim2.png" alt="xxx"></p>
+<h1 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h1><h2 id="i模式"><a href="#i模式" class="headerlink" title="i模式"></a>i模式</h2><p>i模式即为编辑模式，按下字母i开启就可以打字。</p>
+<h2 id="Esc"><a href="#Esc" class="headerlink" title="Esc"></a>Esc</h2><p>从i模式切换为Vim，按下键盘的Esc键切回Vim。</p>
+<h2 id="方向键"><a href="#方向键" class="headerlink" title="方向键"></a>方向键</h2><table>
+<thead>
+<tr>
+<th><code>h</code></th>
+<th><code>j</code></th>
+<th><code>k</code></th>
+<th><code>l</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>左</td>
+<td>下</td>
+<td>上</td>
+<td>右</td>
+</tr>
+</tbody>
+</table>
+<h2 id="基础按键"><a href="#基础按键" class="headerlink" title="基础按键"></a>基础按键</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">按键</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>w</code></td>
+<td>词组正向跳转，<code>空格</code>和<code>符号</code>作为分割</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>W</code></td>
+<td>词组正向跳转，<code>空格</code>作为分割</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>b</code></td>
+<td>词组反向跳转，<code>空格</code>和<code>符号</code>作为分割</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>B</code></td>
+<td>词组反向跳转，<code>空格</code>作为分割</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>f</code></td>
+<td>正向跳转到指定字符</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>F</code></td>
+<td>反向向跳转到指定字符</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>t</code></td>
+<td>正向跳转到指定字符的上一个位置（空格也算）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>T</code></td>
+<td>反向跳转到指定字符的下一个位置（空格也算）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>yy</code></td>
+<td>复制当前行</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>p</code></td>
+<td>粘贴一次</td>
+<td>p</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>(n)p</code></td>
+<td>粘贴n次</td>
+<td>10p,yy10p</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>*</code></td>
+<td>跳转至下一个与当前光标相同字符的位置（可以跨行跳转）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>#</code></td>
+<td>跳转至上一个与当前光标相同字符的位置（可以跨行跳转）</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>v</code></td>
+<td>选中</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>dd</code></td>
+<td>删除当前行</td>
+<td>dd,5dd</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>(n)dd</code></td>
+<td>删除n行</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>d</code></td>
+<td>删除选中区域，与<code>v</code>组合使用</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>u</code></td>
+<td>撤销</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>x</code></td>
+<td>正向按字符单位进行删除</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>X</code></td>
+<td>反向从光标上一个位置处进行删除</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>df(x)</code></td>
+<td>从光标处删除至指定字符</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>di&quot;</code></td>
+<td>删除引号内的内容</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>da&quot;</code></td>
+<td>删除引号内的内容+引号</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>gg</code></td>
+<td>跳转至文件头</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>G</code></td>
+<td>跳转至文件尾</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"><code>(n)G</code></td>
+<td>跳转至n行的开头</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

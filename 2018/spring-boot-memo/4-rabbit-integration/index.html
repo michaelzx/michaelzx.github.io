@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>SpringBoot笔记(四) RabbitMQ 集成和使用 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/SpringBoot" title="SpringBoot">SpringBoot</a>
+                    
+                        <a class="tag" href="/tags/RabbitMQ" title="RabbitMQ">RabbitMQ</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>SpringBoot笔记(四) RabbitMQ 集成和使用</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-08-05
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="依赖和配置"><a href="#依赖和配置" class="headerlink" title="依赖和配置"></a>依赖和配置</h1><p>build.gradle</p>
+<pre><code>dependencies {
+    compile(&#39;org.springframework.boot:spring-boot-starter-amqp&#39;)
+}
+</code></pre><p>application.yml</p>
+<pre><code class="YAML">spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: demo
+    password: demo123
+</code></pre>
+<p>其他貌似都是代码里面的事儿了😂</p>
+<h1 id="最简单的demo"><a href="#最简单的demo" class="headerlink" title="最简单的demo"></a>最简单的demo</h1><p>搭了一个最简单的demo，备忘</p>
+<ul>
+<li>1发布者生产消息</li>
+<li>1消费者接收消息</li>
+</ul>
+<p><a href="https://github.com/michaelzx/spring-boot-rabbit-demo" target="_blank" rel="noopener">https://github.com/michaelzx/spring-boot-rabbit-demo</a></p>
+<h1 id="延迟消息队列"><a href="#延迟消息队列" class="headerlink" title="延迟消息队列"></a>延迟消息队列</h1><p>两个核心关键词：<code>TTL</code>、<code>DLX</code></p>
+<h2 id="TTL"><a href="#TTL" class="headerlink" title="TTL"></a>TTL</h2><p>TTL是<code>Time To Live</code>的缩写，<code>生存时长</code><br>RabbitMQ，允许我们为<code>Queue(队列)</code>或<code>Message(消息)</code>设置TTL，一旦过期，就会变成<code>Dead Letter(死信)</code></p>
+<blockquote>
+<p>如果同时，为<code>队列</code>和<code>消息</code>设置TTL，则会以<code>较小的为准</code></p>
+</blockquote>
+<h2 id="DLX"><a href="#DLX" class="headerlink" title="DLX"></a>DLX</h2><p>DLX是<code>Dead Letter Exchanges</code>的缩写，死信交换器</p>
+<p>RabbitMQ的<code>队列</code>提供了2个可选参数：<code>x-dead-letter-exchange</code>、<code>x-dead-letter-routing-key</code></p>
+<ul>
+<li><code>x-dead-letter-exchange</code>：出现<code>死信</code>之后，将<code>死信</code>从新发送到指定的<code>交换器</code></li>
+<li><code>x-dead-letter-routing-key</code>：出现<code>死信</code>之后，将<code>死信</code>从新发送到指定的<code>队列</code></li>
+</ul>
+<p>这两个参数<code>必须同时使用</code>，只有这样才能确定最后是转发到哪个队列的</p>
+<p><img src="http://img.zhangxiao.org/rabbit_mq_delay_message_queue.jpg" alt="xxx"><br><a href="http://img.zhangxiao.org/rabbit_mq_delay_message_queue.jpg" target="_blank" rel="noopener">查看大图</a></p>
+<p>做了一个简单的demo：<a href="https://github.com/michaelzx/spring-boot-rabbit-mq-delay-demo" target="_blank" rel="noopener">https://github.com/michaelzx/spring-boot-rabbit-mq-delay-demo</a></p>
+<h1 id="广播（订阅）"><a href="#广播（订阅）" class="headerlink" title="广播（订阅）"></a>广播（订阅）</h1><p>N个消费者，消费同一个队列，每个人都能拿到相同的消息</p>
+<blockquote>
+<p>待实践，备忘留坑</p>
+</blockquote>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><blockquote>
+<p><a href="https://blog.csdn.net/u014308482/article/details/53036770" target="_blank" rel="noopener">《RabbitMQ 实现延迟队列的两种方式》</a><br><a href="https://blog.csdn.net/i_vic/article/details/72742277" target="_blank" rel="noopener">《spring boot 自学笔记(五) Rabbitmq集成,延时消息队列实现》</a><br><a href="https://blog.csdn.net/lxhjh/article/details/69055129" target="_blank" rel="noopener">《SpringBoot的RabbitMQ消息队列: 四、第三模式”Publish/Subscribe”》</a></p>
+</blockquote>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

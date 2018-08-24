@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>SpringBoot笔记(三) RabbitMQ 基础概念 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-7.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/SpringBoot" title="SpringBoot">SpringBoot</a>
+                    
+                        <a class="tag" href="/tags/RabbitMQ" title="RabbitMQ">RabbitMQ</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>SpringBoot笔记(三) RabbitMQ 基础概念</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-04-17
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>学习笔记<br>
+            </blockquote>
+            
+            </p>
+<p>RabbitMQ 是一个由 Erlang 语言开发的 <code>AMQP</code>（Advanced Message Queuing Protocol） 的开源实现。最初起源于金融系统，用于在分布式系统中存储转发消息，在易用性、扩展性、高可用性等方面表现不俗。</p>
+<h1 id="Message-Queue"><a href="#Message-Queue" class="headerlink" title="Message Queue"></a>Message Queue</h1><ul>
+<li>中文：消息队列</li>
+<li>外文：Message Queue</li>
+<li>含义：消息的传输过程中<code>保存消息的容器</code></li>
+<li>特点：消息可以非常简单也可以更复杂</li>
+</ul>
+<h2 id="基础工作模型"><a href="#基础工作模型" class="headerlink" title="基础工作模型"></a>基础工作模型</h2><p>消息发布者—-发布—-&gt;<strong>消息队列</strong>&lt;—-订阅—-消息消费者</p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li>可作为两个应用之间的通信方式</li>
+<li>可三不管（WHO、WHERE、WHEN）<ul>
+<li><code>消息发布者</code>，不用管<code>信息消费者</code>，是谁，在哪里，什么时候来MQ中获取消息</li>
+<li><code>消息消费者</code>，不用管<code>信息发布者</code>，是谁，在哪里，什么时候把消息发布到MQ中</li>
+</ul>
+</li>
+</ol>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ol>
+<li>异步处理</li>
+<li>应用解耦</li>
+<li>限流削锋</li>
+<li>日志处理</li>
+<li>消息通讯</li>
+</ol>
+<p>感觉其核心在于：异步与解耦，这两个层面<br>这篇博客整理的不错：<a href="https://www.cnblogs.com/linjiqin/p/5720865.html" target="_blank" rel="noopener">关于消息队列的使用</a></p>
+<h1 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h1><p>AMQP，全称<code>Advanced Message Queuing Protocol</code>，是一个提供统一消息服务的应用层标准高级消息队列协议</p>
+<p>它是应用层协议的一个开放标准，为面向消息的中间件设计，基于此协议的客户端与消息中间件可传递消息，并不受产品、开发语言等条件的限制。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ol>
+<li><strong>Message</strong><br>消息，消息是不具名的，它由<code>消息头</code>和<code>消息体</code>组成。消息体是不透明的，而<code>消息头</code>则由一系列的可选属性组成，这些属性包括routing-key（路由键）、priority（相对于其他消息的优先权）、delivery-mode（指出该消息可能需要持久性存储）等。</li>
+<li><strong>Publisher/Producer</strong><br>消息的发布者（生产者，两个意思差不多），是一个向交换器发布消息的客户端应用程序。</li>
+<li><strong>Exchange</strong><br>交换机，用来接收生产者发送的消息并将这些消息路由给服务器中的队列。</li>
+<li><strong>Binding</strong><br>绑定，用于消息队列和交换器之间的关联。一个绑定就是基于路由键将交换器和消息队列连接起来的路由规则，所以可以将交换器理解成一个由绑定构成的路由表。</li>
+<li><strong>Queue</strong><br>消息队列，用来保存消息直到发送给消费者。它是消息的容器，也是消息的终点。一个消息可投入一个或多个队列。消息一直在队列里面，等待消费者连接到这个队列将其取走。</li>
+<li><strong>Connection</strong><br>网络连接，比如一个TCP连接。</li>
+<li><strong>Channel</strong><br>信道，多路复用连接中的一条独立的双向数据流通道。信道是建立在真实的TCP连接内地虚拟连接，AMQP 命令都是通过信道发出去的，不管是发布消息、订阅队列还是接收消息，这些动作都是通过信道完成。因为对于操作系统来说建立和销毁 TCP 都是非常昂贵的开销，所以引入了信道的概念，以复用一条 TCP 连接。</li>
+<li><strong>Consumer</strong><br>消息的消费者，表示一个从消息队列中取得消息的客户端应用程序。</li>
+<li><strong>Virtual Host</strong><br>虚拟主机，表示一批交换器、消息队列和相关对象。虚拟主机是共享相同的身份认证和加密环境的独立服务器域。每个 vhost 本质上就是一个 mini 版的 RabbitMQ 服务器，拥有自己的队列、交换器、绑定和权限机制。vhost 是 AMQP 概念的基础，必须在连接时指定，RabbitMQ 默认的 vhost 是 / 。</li>
+<li><strong>Broker</strong><br>表示消息队列服务器实体。</li>
+</ol>
+<p>更多详情，可查看<a href="http://rabbitmq.mr-ping.com/AMQP/AMQP_0-9-1_Model_Explained.html" target="_blank" rel="noopener">《AMQP 0-9-1 简介》</a></p>
+<h1 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h1><h2 id="构架图"><a href="#构架图" class="headerlink" title="构架图"></a>构架图</h2><p><img src="http://img.zhangxiao.org/rabbit_mq_structure.jpg" alt=""></p>
+<h2 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><strong>可靠性（Reliability）</strong><br>RabbitMQ 使用一些机制来保证可靠性，如持久化、传输确认、发布确认。</li>
+<li><strong>灵活的路由（Flexible Routing）</strong><br>在消息进入队列之前，通过 Exchange 来路由消息的。对于典型的路由功能，RabbitMQ 已经提供了一些内置的 Exchange 来实现。针对更复杂的路由功能，可以将多个 Exchange 绑定在一起，也通过插件机制实现自己的 Exchange 。</li>
+<li><strong>消息集群（Clustering）</strong><br>多个 RabbitMQ 服务器可以组成一个集群，形成一个逻辑 Broker 。</li>
+<li><strong>高可用（Highly Available Queues）</strong><br>队列可以在集群中的机器上进行镜像，使得在部分节点出问题的情况下队列仍然可用。</li>
+<li><strong>多种协议（Multi-protocol）</strong><br>RabbitMQ 支持多种消息队列协议，比如 STOMP、MQTT 等等。</li>
+<li><strong>多语言客户端（Many Clients）</strong><br>RabbitMQ 几乎支持所有常用语言，比如 Java、.NET、Ruby 等等。</li>
+<li><strong>管理界面（Management UI）</strong><br>RabbitMQ 提供了一个易用的用户界面，使得用户可以监控和管理消息 Broker 的许多方面。</li>
+<li><strong>跟踪机制（Tracing）</strong><br>如果消息异常，RabbitMQ 提供了消息跟踪机制，使用者可以找出发生了什么。</li>
+<li><strong>插件机制（Plugin System）</strong><br>RabbitMQ 提供了许多插件，来从多方面进行扩展，也可以编写自己的插件。</li>
+</ol>
+<h2 id="下载和安装"><a href="#下载和安装" class="headerlink" title="下载和安装"></a>下载和安装</h2><p>没啥好说的，看官网：<a href="http://www.rabbitmq.com/download.html" target="_blank" rel="noopener">http://www.rabbitmq.com/download.html</a><br>OSX就用<code>Homebrew</code>安装就行了<br>不过安装完以后记得按照官网说明,把<code>/usr/local/sbin</code>加到<code>.bash_profile</code>的$PATH中</p>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><pre><code class="bash">$ rabbitmq-server
+</code></pre>
+<blockquote>
+<p>更多命令，可以查看官方文档，比较全面，<a href="http://www.rabbitmq.com/manpages.html" target="_blank" rel="noopener">http://www.rabbitmq.com/manpages.html</a></p>
+</blockquote>
+<h2 id="管理UI插件"><a href="#管理UI插件" class="headerlink" title="管理UI插件"></a>管理UI插件</h2><p>通用以下命令启用</p>
+<pre><code class="bash">$ rabbitmq-plugins enable rabbitmq_management
+</code></pre>
+<p>完成后可以访问web控制台</p>
+<pre><code class="text">http://localhost:15672/
+</code></pre>
+<p>RabbitMQ提供了一个默认用户<code>guest</code>，密码也是<code>guest</code></p>
+<p>说明：此<code>guest</code>非一般的<code>guest</code></p>
+<ul>
+<li>它其实是一个<code>administrator</code></li>
+<li>仅限使用<code>localhost</code>访问<br>所以可以用它在本地干任何事儿<br>这默认提供的guest用户只能本地访问，所以额外创建用户用于测试</li>
+</ul>
+<p>可以用以下命令来添加一个用户</p>
+<pre><code class="bash">$ rabbitmqctl add_user demo demo123
+</code></pre>
+<blockquote>
+<p>账号添加后，啥事儿都干不了，因为没有配置权限，可以在管理界面中进行配置</p>
+</blockquote>
+<h1 id="交换器类型"><a href="#交换器类型" class="headerlink" title="交换器类型"></a>交换器类型</h1><h2 id="Direct交换器"><a href="#Direct交换器" class="headerlink" title="Direct交换器"></a>Direct交换器</h2><p>direct -&gt; routingKey -&gt; queue，相当一种点对点的消息投递，如果路由键匹配，就直接投递到相应的队列</p>
+<h2 id="Fanout交换器"><a href="#Fanout交换器" class="headerlink" title="Fanout交换器"></a>Fanout交换器</h2><p>fanout交换器相当于实现了一（交换器）对多（队列）的广播投递方式</p>
+<h2 id="Topic交换器"><a href="#Topic交换器" class="headerlink" title="Topic交换器"></a>Topic交换器</h2><p>提供一种模式匹配的投递方式，我们可以根据主题来决定消息投递到哪个队列。</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><blockquote>
+<p><a href="http://www.rabbitmq.com/documentation.html" target="_blank" rel="noopener">《RabbitMq官方文档》</a><br><a href="http://rabbitmq.mr-ping.com/" target="_blank" rel="noopener">《RabbitMQ 中文文档》</a><br><a href="https://www.jianshu.com/p/79ca08116d57" target="_blank" rel="noopener">《消息队列之 RabbitMQ》</a><br><a href="https://www.jianshu.com/p/e1258c004314" target="_blank" rel="noopener">《spring boot集成RabbitMQ》</a><br><a href="https://blog.csdn.net/whoamiyang/article/details/54954780" target="_blank" rel="noopener">《RabbitMQ的应用场景以及基本原理介绍》</a><br><a href="http://liuxing.info/2017/06/30/Spring%20AMQP%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/" target="_blank" rel="noopener">《Spring AMQP中文文档》</a><br><a href="https://blog.csdn.net/column/details/rabbitmq.html" target="_blank" rel="noopener">《RabbitMQ从入门到精通》</a><br><a href="https://blog.csdn.net/lxhjh/article/category/6836687" target="_blank" rel="noopener">《lxhjh的专栏》</a></p>
+</blockquote>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

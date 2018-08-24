@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>重拾Angular（二）模板语法 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/前端" title="前端">前端</a>
+                    
+                        <a class="tag" href="/tags/Angular" title="Angular">Angular</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>重拾Angular（二）模板语法</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2018-07-03
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>Angular官方开发文档讲的很细致，但是这是一把双刃剑。<br>
+            </blockquote>
+            
+            </p>
+<h1 id="双刃剑"><a href="#双刃剑" class="headerlink" title="双刃剑"></a>双刃剑</h1><p>上一篇中<code>Angular CLI</code>的文档，并非Angular官方开发文档的一部分。（可能我没发现吧）<br>而从这篇文章开始，我将开始阅读<code>Angular的官方开发文档</code>。</p>
+<p>首先，我阅读完了<code>教程</code>、<code>核心知识-构架</code>，粗略的了解下<code>Angular</code>的开发流程和一些基本的概念。</p>
+<p>然后，就是看<code>核心知识-组件与模板</code>了，看完了第一遍其实，还是有点懵。</p>
+<p>有几点感受：</p>
+<ol>
+<li>可能是因为是英译，有些地方感觉翻译的有点不够接地气，不太便于国人理解</li>
+<li>文字过于冗长，有时候让人很难抓到重点</li>
+<li>像看小说，一定要循序渐进慢慢看，不然稍微跳一下，剧情就接不上了</li>
+<li>看过的vue文档的朋友，一定会感觉vue的文档简洁而清晰</li>
+</ol>
+<p>所以在看Angular文档的同时，提炼总结下，还是很有必要的。</p>
+<h1 id="1-Attribute-amp-Property"><a href="#1-Attribute-amp-Property" class="headerlink" title="1.Attribute &amp; Property"></a>1.Attribute &amp; Property</h1><blockquote>
+<p>官方文档中强调： <code>定模板绑是通过 property 和事件来工作的，而不是 attribute。</code></p>
+</blockquote>
+<p>在Angular开发中，个人感觉一定要<code>明确这两者的别</code>，才能更好的理解Angular的工作方式。<br><code>不然很容易产生混淆</code>，因此我把这一小节放到最前面。</p>
+<p><code>attribute</code>是指<code>HTML attribute</code><br><code>property</code>是指<code>DOM property</code></p>
+<p><code>Angular世界中所说的【属性】，基本上应该是指【property】</code></p>
+<p><code>attribute</code>在 Angular 中 唯一的作用是用来<code>初始化元素和指令的状态</code>。 当进行数据绑定时，只是在与元素和指令的 <code>property</code> 和事件打交道，而 attribute 就完全靠边站了。</p>
+<h1 id="2-插值"><a href="#2-插值" class="headerlink" title="2.插值"></a>2.插值</h1><h2 id="2-1-文本"><a href="#2-1-文本" class="headerlink" title="2.1.文本"></a>2.1.文本</h2><pre><code>&lt;p&gt;My current hero is {{currentHero.name}}&lt;/p&gt;
+</code></pre><h2 id="2-2-原始Html"><a href="#2-2-原始Html" class="headerlink" title="2.2.原始Html"></a>2.2.原始Html</h2><p>Angular 数据绑定对危险 HTML 有防备。 <code>在显示它们之前，它会对内容先进行处理</code>。<br>不管是插值表达式还是属性绑定，都不会允许带有 script 标签的 HTML 泄漏到浏览器中。</p>
+<p>src/app/app.component.ts</p>
+<pre><code class="html">htmlWithEvil = &#39;&lt;h1&gt;be careful&lt;/h1&gt;&lt;br&gt;&lt;script&gt;alert(&quot;evil never sleeps&quot;)&lt;/script&gt;&#39;;
+</code></pre>
+<p>src/app/app.component.html</p>
+<pre><code class="html">&lt;!-- 方式1 --&gt;
+&lt;h1&gt;{{htmlWithEvil}}&lt;/h1&gt;
+&lt;!-- 方式2 --&gt;
+&lt;h1 [innerHTML]=&quot;htmlWithEvil&quot;&gt;&lt;/h1&gt;
+</code></pre>
+<p>方式1：<code>直接插值</code>，显然Angular不会这么轻易让你直接插html进来。htmlWithEvil会被转义后输出，<code>html不会有任何效果</code></p>
+<p>方式2：绑定<code>innerHTML</code>属性，htmlWithEvil中的<code>&lt;script&gt;</code>被过滤后，<code>html生效</code></p>
+<h2 id="2-3-模板表达式"><a href="#2-3-模板表达式" class="headerlink" title="2.3.模板表达式"></a>2.3.模板表达式</h2><pre><code>指的是{{expression}} 中的 expression
+</code></pre><p>方便起见本文中的<code>expression</code>均是指<code>模板表达式</code></p>
+<p><code>expression</code>不仅可以在花括号里面用，可以在<code>属性绑定</code>的时候用</p>
+<p><code>expression</code>的语法和JavaScript<code>相似</code>，但<code>不完全相同</code></p>
+<p>与JavaScript的区别<br><code>expression</code>不予许出现：</p>
+<ul>
+<li>赋值 (=, +=, -=, …)</li>
+<li>new 运算符</li>
+<li>使用 ; 或 , 的链式表达式</li>
+<li>自增和自减运算符：++ 和 –</li>
+<li>不支持位运算 | 和 &amp;</li>
+</ul>
+<h2 id="2-4-模板表达式运算符"><a href="#2-4-模板表达式运算符" class="headerlink" title="2.4.模板表达式运算符"></a>2.4.模板表达式运算符</h2><p><code>模板表达式运算符</code>是JavaScript中<code>没有的</code>的特性</p>
+<h3 id="2-4-1-管道操作符"><a href="#2-4-1-管道操作符" class="headerlink" title="2.4.1.管道操作符"></a>2.4.1.管道操作符</h3><p>管道操作符<code>|</code>，可对表达式结果进行一些转换</p>
+<pre><code>&lt;div&gt;Title through uppercase pipe: {{title | uppercase}}&lt;/div&gt;
+</code></pre><p>想了解更多Angular自带的管道，可以官网查<a href="https://angular.cn/api?type=pipe" target="_blank" rel="noopener">管道的API</a></p>
+<h3 id="2-4-2-安全导航操作符和空属性路径"><a href="#2-4-2-安全导航操作符和空属性路径" class="headerlink" title="2.4.2.安全导航操作符和空属性路径"></a>2.4.2.安全导航操作符和空属性路径</h3><p><code>可以完美的解决空值异常，增加视图的容错性。</code></p>
+<pre><code class="html">{{order?.consignee?.mobile}}
+</code></pre>
+<p>即使<code>consignee</code>是个<code>空值</code>，也不会报异常，只是<code>不显示而已</code>。<code>可以完美的解决空值异常，增加视图的容错性。</code></p>
+<h3 id="2-4-3-非空断言操作符"><a href="#2-4-3-非空断言操作符" class="headerlink" title="2.4.3.非空断言操作符"></a>2.4.3.非空断言操作符</h3><p>如果你打开了<code>严格检测</code>，那就要用到这个模板操作符，而其它情况下则是<code>可选的</code>。</p>
+<pre><code class="html">&lt;!--No hero, no text --&gt;
+&lt;div *ngIf=&quot;hero&quot;&gt;
+  The hero&#39;s name is {{hero!.name}}
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>在 TypeScript 2.0 中，你可以使用 <code>--strictNullChecks</code> 标志强制开启严格空值检查。TypeScript 就会确保不存在意料之外的 null 或 undefined。</p>
+</blockquote>
+<h1 id="3-属性绑定"><a href="#3-属性绑定" class="headerlink" title="3.属性绑定"></a>3.属性绑定</h1><h2 id="3-1-基本语法"><a href="#3-1-基本语法" class="headerlink" title="3.1.基本语法"></a>3.1.基本语法</h2><p><code>[property]=&quot;expression&quot;</code></p>
+<h2 id="3-1-三种写法"><a href="#3-1-三种写法" class="headerlink" title="3.1.三种写法"></a>3.1.三种写法</h2><pre><code class="html">&lt;!-- 例1 --&gt;
+&lt;img [src]=&quot;heroImageUrl&quot;&gt;
+&lt;!-- 例2 --&gt;
+&lt;img bind-src=&quot;heroImageUrl&quot;&gt;
+&lt;!-- 例3 --&gt;
+&lt;img src=&quot;{{heroImageUrl}}&quot;&gt;
+</code></pre>
+<ul>
+<li>以上三种方式，效果是相同的</li>
+<li><code>例1</code>、<code>例2</code>，都是属于纯正的<code>属性绑定</code>语法</li>
+<li><code>例3</code>，血统不纯正，<code>不推荐</code>使用<br>估计是为了兼顾<code>AngularJs</code>的使用习惯<br>虽然在渲染视图之前，Angular会把<code>例3</code>翻译成相应的<code>属性绑定</code><br>但当<code>property</code>数据类型不是<code>字符串</code>时，<code>会产生问题</code>。后面3.2举例</li>
+</ul>
+<blockquote>
+<p>上面这个例子中,<code>img</code>的<code>attribute</code>src与<code>image</code>的<code>property</code>src相同，所有感觉让人产生混淆</p>
+</blockquote>
+<h2 id="3-2-容易混淆之处"><a href="#3-2-容易混淆之处" class="headerlink" title="3.2.容易混淆之处"></a>3.2.容易混淆之处</h2><pre><code class="html">&lt;!-- 例1 --&gt;
+&lt;span [innerHTML]=&quot;htmlWithEvil&quot;&gt;&lt;/span&gt;
+&lt;!-- 例2 --&gt;
+&lt;span innerHTML=&quot;{{htmlWithEvil}}&quot;&gt;&lt;/span&gt;
+</code></pre>
+<p>两者<code>效果完全相同</code>，再次印证：方括号里面的其实是<code>property</code>，而不是,不是,不是<code>attribute</code>。</p>
+<pre><code class="html">&lt;button [disabled]=&quot;isDisabled&quot;&gt;Save&lt;/button&gt;
+&lt;button bind-disabled=&quot;isDisabled&quot;&gt;Save&lt;/button&gt;
+&lt;button disabled=&quot;{{isDisabled}}&quot;&gt;Save&lt;/button&gt;
+</code></pre>
+<ul>
+<li>如果当<code>isDisabled</code>值为<code>true</code>的时候，三个按钮都禁用了，没毛病。</li>
+<li>如果当<code>isDisabled</code>值为<code>false</code>的时候，前两个按钮可用了，没毛病。但是！<code>第三个按钮依然还是禁用</code>。<br>应该是把<code>false</code>转成<code>&#39;false&#39;</code>后，赋值给了<code>disabled</code>这个<code>property</code><br>所以，不要以为你用<code>TypeScript</code>在写<code>Angular</code>,就可以忘了<code>JavaScript</code>这个弱类型语言。</li>
+</ul>
+<blockquote>
+<p>最终建议：为了避免不必要的麻烦，还是使用<code>标准语法</code>为好.</p>
+</blockquote>
+<h2 id="3-3-组件属性"><a href="#3-3-组件属性" class="headerlink" title="3.3.组件属性"></a>3.3.组件属性</h2><p>属性绑定，同样适用于<code>自定义组件</code>。不过需要注意的是，在绑定属性时，务必传入<code>匹配的数据类型</code></p>
+<pre><code class="html">&lt;app-hero-detail [hero]=&quot;currentHero&quot;&gt;&lt;/app-hero-detail&gt;
+</code></pre>
+<blockquote>
+<p><code>app-hero-detail</code>组件的 hero 属性想要一个 Hero 对象，那就在属性绑定中精确地给它一个 Hero 对象</p>
+</blockquote>
+<h1 id="4-attribute绑定"><a href="#4-attribute绑定" class="headerlink" title="4.attribute绑定"></a>4.attribute绑定</h1><p>基本语法：<code>[attr.colspan]=&quot;expression&quot;</code></p>
+<pre><code class="html">&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;2&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td [attr.colspan]=&quot;1 + 1&quot;&gt;One-Two&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<p>当有些元素的<code>attribute</code>并没有对应<code>property</code>时，就可以这么干</p>
+<blockquote>
+<p>考虑 ARIA， SVG 和 table 中的 colspan/rowspan 等 attribute。 它们是纯粹的 attribute，没有对应的属性可供绑定。</p>
+</blockquote>
+<h1 id="5-class绑定"><a href="#5-class绑定" class="headerlink" title="5.class绑定"></a>5.class绑定</h1><h2 id="5-1-基本语法"><a href="#5-1-基本语法" class="headerlink" title="5.1.基本语法"></a>5.1.基本语法</h2><p><code>[class.class-name]=&quot;isSpecial&quot;</code>，isSpecial值为 <code>true</code>/<code>false</code></p>
+<p><strong>追加</strong></p>
+<pre><code class="html">&lt;div class=&quot;a-class b-class&quot; [class.c-class]=&#39;condition&#39;&gt;xxx&lt;/div&gt;
+</code></pre>
+<p><code>condition = true</code>时，会在原有class基础上，追加c-class。实际输出：</p>
+<pre><code class="html">&lt;div class=&quot;a-class b-class c-class&quot;&gt;xxx&lt;/div&gt;
+</code></pre>
+<p><strong>覆盖</strong></p>
+<pre><code class="html">&lt;div class=&quot;a-class b-class&quot; [class]=&#39;classTxt&#39;&gt;xxx&lt;/div&gt;
+</code></pre>
+<p><code>classTxt = &#39;c-class&#39;</code>时，将会覆盖原有class。实际输出：</p>
+<pre><code class="html">&lt;div class=&quot;c-class&quot;&gt;xxx&lt;/div&gt;
+</code></pre>
+<p>这种做法，似乎很<code>鸡肋</code>，没想出使用场景。我就是列出来，做个区分</p>
+<p><strong>痛点</strong></p>
+<pre><code class="html">&lt;div class=&quot;a-class b-class&quot; 
+  [class.c-class]=&#39;cCondition&#39;
+  [class.d-class]=&#39;dCondition&#39;
+  ...
+&gt;xxx&lt;/div&gt;
+</code></pre>
+<p>如果有N个class，需要用变量作为条件控制，这就变的很尴尬。</p>
+<p>这个时候就要祭出<code>NgClass</code>了。</p>
+<h2 id="5-2-NgClass"><a href="#5-2-NgClass" class="headerlink" title="5.2.NgClass"></a>5.2.NgClass</h2><p>用法示例：</p>
+<pre><code class="html">&lt;!-- 字符串 --&gt;
+&lt;div class=&quot;a-class&quot; [ngClass]=&quot;&#39;c-class d-class&#39;&quot;&gt;xxx&lt;/div&gt;
+&lt;!-- 数组 --&gt;
+&lt;div class=&quot;a-class&quot; [ngClass]=&quot;[&#39;c-class&#39;,&#39;d-class&#39;]&quot;&gt;xxx&lt;/div&gt;
+&lt;!-- 对象：开关单个class --&gt;
+&lt;div class=&quot;a-class&quot; [ngClass]=&quot;{&#39;c-class&#39;:condtionC,&#39;d-class&#39;:condtionD}&quot;&gt;xxx&lt;/div&gt;
+&lt;!-- 对象：开关一组class --&gt;
+&lt;div class=&quot;a-class&quot; [ngClass]=&quot;{&#39;c-class d-class&#39;:condtionCD}&quot;&gt;xxx&lt;/div&gt;
+</code></pre>
+<p><code>a-class</code>始终存在，<code>[ngClass]</code>控制是否追加<code>c-class</code>、<code>d-class</code><br>可见NgClass，<code>非常灵活</code></p>
+<blockquote>
+<p>想不明白，为啥还要提供[class]这种操作方式。像vue就只是提供了<code>:class</code>而已。<br>有时候选择多了，也未必是件好事儿。</p>
+</blockquote>
+<h1 id="6-style绑定"><a href="#6-style绑定" class="headerlink" title="6.style绑定"></a>6.style绑定</h1><h2 id="6-1-基本命令"><a href="#6-1-基本命令" class="headerlink" title="6.1.基本命令"></a>6.1.基本命令</h2><p><code>[style.style-property(.unit)]=&quot;value&quot;</code></p>
+<pre><code>&lt;button [style.color]=&quot;isSpecial ? &#39;red&#39;: &#39;green&#39;&quot;&gt;Red&lt;/button&gt;
+&lt;button [style.background-color]=&quot;canSave ? &#39;cyan&#39;: &#39;grey&#39;&quot; &gt;Save&lt;/button&gt;
+&lt;button [style.font-size.em]=&quot;isSpecial ? 3 : 1&quot; &gt;Big&lt;/button&gt;
+&lt;button [style.font-size.%]=&quot;!isSpecial ? 150 : 50&quot; &gt;Small&lt;/button&gt;
+</code></pre><p>不多说，提炼备忘</p>
+<h2 id="6-2-NgStyle"><a href="#6-2-NgStyle" class="headerlink" title="6.2.NgStyle"></a>6.2.NgStyle</h2><pre><code>&lt;div style=&quot;background: red;&quot; [ngStyle]=&quot;{&#39;color&#39;: &#39;white&#39;}&quot;&gt;xxx&lt;/div&gt;
+&lt;div style=&quot;color: yellow;&quot; [ngStyle]=&quot;{&#39;color&#39;: hasGreenHat?&#39;green&#39;:&#39;red&#39;}&quot;&gt;xxx&lt;/div&gt;
+&lt;div style=&quot;background: yellow;&quot; [ngStyle]=&quot;varInComponent&quot;&gt;xxx&lt;/div&gt;
+</code></pre><ul>
+<li>可在原有样式基础上<code>追加</code></li>
+<li>可<code>覆盖</code>原有的<code>某个</code>样式</li>
+<li>可直接赋值<code>上下文变量</code></li>
+</ul>
+<h1 id="7-条件渲染"><a href="#7-条件渲染" class="headerlink" title="7.条件渲染"></a>7.条件渲染</h1><h2 id="7-1-NgIf"><a href="#7-1-NgIf" class="headerlink" title="7.1.NgIf"></a>7.1.NgIf</h2><pre><code>&lt;app-hero-detail *ngIf=&quot;isActive&quot;&gt;&lt;/app-hero-detail&gt;
+</code></pre><h2 id="7-2-NgSwitch"><a href="#7-2-NgSwitch" class="headerlink" title="7.2.NgSwitch"></a>7.2.NgSwitch</h2><pre><code class="html">&lt;div [ngSwitch]=&quot;currentHero.emotion&quot;&gt;
+  &lt;app-happy-hero    *ngSwitchCase=&quot;&#39;happy&#39;&quot;    [hero]=&quot;currentHero&quot;&gt;&lt;/app-happy-hero&gt;
+  &lt;app-sad-hero      *ngSwitchCase=&quot;&#39;sad&#39;&quot;      [hero]=&quot;currentHero&quot;&gt;&lt;/app-sad-hero&gt;
+  &lt;app-confused-hero *ngSwitchCase=&quot;&#39;confused&#39;&quot; [hero]=&quot;currentHero&quot;&gt;&lt;/app-confused-hero&gt;
+  &lt;app-unknown-hero  *ngSwitchDefault           [hero]=&quot;currentHero&quot;&gt;&lt;/app-unknown-hero&gt;
+&lt;/div&gt;
+</code></pre>
+<h1 id="8-列表渲染"><a href="#8-列表渲染" class="headerlink" title="8.列表渲染"></a>8.列表渲染</h1><h2 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h2><pre><code class="html">&lt;table width=&quot;100%&quot;&gt;
+  &lt;tr&gt;
+    &lt;th align=&quot;left&quot;&gt;id&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;name&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;index&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;isFirst&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;isLast&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;odd&lt;/th&gt;
+    &lt;th align=&quot;left&quot;&gt;even&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr *ngFor=&quot;let item of list; let i=index;let f=first;let l=last;let e=even;let o=odd; trackBy: trackById&quot; [class.odd]=&quot;o&quot;&gt;
+    &lt;td&gt;{{item.id}}&lt;/td&gt;
+    &lt;td&gt;{{item.name}}&lt;/td&gt;
+    &lt;td&gt;{{i}}&lt;/td&gt;
+    &lt;td&gt;{{f}}&lt;/td&gt;
+    &lt;td&gt;{{l}}&lt;/td&gt;
+    &lt;td&gt;{{o}}&lt;/td&gt;
+    &lt;td&gt;{{e}}&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<pre><code class="TypeScript">export class AppComponent {
+  list = [
+    {id:6,name:&quot;name-a&quot;},
+    {id:5,name:&quot;name-b&quot;},
+    {id:4,name:&quot;name-c&quot;},
+    {id:3,name:&quot;name-d&quot;},
+    {id:2,name:&quot;name-e&quot;},
+    {id:1,name:&quot;name-f&quot;}
+  ]  
+  trackById(index: number, item: any): number { return item.id; }
+}
+</code></pre>
+<h2 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h2><p><code>index(number)</code> 引索<br><code>first(boolean)</code> 是否第一行<br><code>last(boolean)</code> 是否第二行<br><code>even(boolean)</code> 引索是否是偶数，<code>不是指是否偶数行</code><br><code>odd(boolean)</code> 引索是否是奇数，<code>不是指是否奇数行</code></p>
+<p>以上内置变量，必须要在<code>ngFor</code>内<code>显示声明</code>，否则默认是拿不到的</p>
+<p><code>ngFor</code>的内容并不是<code>模板表达式</code>，而是Angular中的<a href="https://angular.cn/guide/structural-directives#microsyntax" target="_blank" rel="noopener">微语法</a></p>
+<pre><code class="node">let item of list; index as i;first as f;last as l;even as e;odd as o;
+let item of list; let i=index;let f=first;let l=last;let e=even;let o=odd;
+</code></pre>
+<p>上面，2个写法是等价的，1更短，2更直观，<code>推荐2</code></p>
+<h2 id="trackBy"><a href="#trackBy" class="headerlink" title="trackBy"></a>trackBy</h2><p>需要指定一个<code>function</code>,用于提升性能，提高元素的复用性，避免将所有列表单元重绘。</p>
+<p>与<code>vue</code>中的<code>track-by</code>或<code>:key</code>同一个作用</p>
+<h1 id="9-事件处理"><a href="#9-事件处理" class="headerlink" title="9.事件处理"></a>9.事件处理</h1><p>安利一篇文章，感觉总结的不错</p>
+<p><a href="https://segmentfault.com/a/1190000009149495" target="_blank" rel="noopener">《Angular 4.x Events Bubbling》</a></p>
+<blockquote>
+<p>探索至此，发现有一个梳理得非常棒的的博客：<a href="https://segmentfault.com/a/1190000008754631" target="_blank" rel="noopener">Angular 4.x 修仙之路</a><br>强烈安利</p>
+</blockquote>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

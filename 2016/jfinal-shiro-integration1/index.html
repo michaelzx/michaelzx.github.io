@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>JFianl整合Shiro（一） - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/jFinal" title="jFinal">jFinal</a>
+                    
+                        <a class="tag" href="/tags/Shiro" title="Shiro">Shiro</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>JFianl整合Shiro（一）</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-08-27
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>Apache Shiro是Java的一个安全框架，也是我第一个使用的Java安全框架。在我的入门级开源项目<a href="https://github.com/michaelzx/JFinal-Paladin" target="_blank" rel="noopener">JFinal-Paladin</a>中，我进行了一些实践，总体感觉还是非常棒的，该考虑到的都感觉已经考虑到。对比之前所接触过的php框架里面安全模块，感觉只有过之而无不及。个人体验而已，有意见的朋友请喷😃。<br>本文主要来讲述下在JFianl中集成Shiro过程中的经验和想法。</p>
+            </blockquote>
+            
+            <h1 id="入门必看"><a href="#入门必看" class="headerlink" title="入门必看"></a>入门必看</h1><p>英文好的可以直接看<a href="http://shiro.apache.org/get-started.html" target="_blank" rel="noopener">官网教程</a>，英文不好的可以看下开涛的博客《<a href="http://jinnianshilongnian.iteye.com/blog/2018398" target="_blank" rel="noopener">跟我学Shiro</a>》系列</p>
+<p>在看教程之前，最好了解想一些shiro的概念：<a href="http://shiro.apache.org/terminology.html" target="_blank" rel="noopener">Apache Shiro Terminology</a></p>
+<h1 id="自己入门时踩的坑"><a href="#自己入门时踩的坑" class="headerlink" title="自己入门时踩的坑"></a>自己入门时踩的坑</h1><p>一开始的时候，我自己搞了一个JFinal的全局<code>Interceptor</code>，用来做<code>Shiro</code>的权限判断。原因是一开始不了解Shiro，不知道运用<code>Shiro</code>的<code>Filter</code>，理所当然地从<code>JFinal</code>的层面进行思考。</p>
+<p>当然，在<code>JFinal</code>的<code>Interceptor</code>中也是可以做一些权限的判断的，不过顺序上面先要经过<code>Shiro</code>的<code>Filter</code>，然后才会到<code>JFinal</code>的<code>Filter</code>，真正进入<code>JFinal</code>。</p>
+<h1 id="现成方案"><a href="#现成方案" class="headerlink" title="现成方案"></a>现成方案</h1><p>可以直接拿来用，可以做参考，我在实践的时候，也参考了不少</p>
+<h2 id="JFinalShiroPlugin"><a href="#JFinalShiroPlugin" class="headerlink" title="JFinalShiroPlugin"></a>JFinalShiroPlugin</h2><p>项目地址：<a href="http://git.oschina.net/myaniu/jfinalshiroplugin" target="_blank" rel="noopener">http://git.oschina.net/myaniu/jfinalshiroplugin</a></p>
+<h2 id="JFinal-Authority"><a href="#JFinal-Authority" class="headerlink" title="JFinal_Authority"></a>JFinal_Authority</h2><p>项目地址：<a href="http://git.oschina.net/jayqqaa12/JFinal_Authority" target="_blank" rel="noopener">http://git.oschina.net/jayqqaa12/JFinal_Authority</a></p>
+<h2 id="Dreampie-jfinal-shiro"><a href="#Dreampie-jfinal-shiro" class="headerlink" title="Dreampie/jfinal-shiro"></a>Dreampie/jfinal-shiro</h2><p>项目地址：<a href="https://github.com/Dreampie/jfinal-shiro" target="_blank" rel="noopener">https://github.com/Dreampie/jfinal-shiro</a></p>
+<h1 id="现成方案之个人感受"><a href="#现成方案之个人感受" class="headerlink" title="现成方案之个人感受"></a>现成方案之个人感受</h1><p>部分现成方案中使用了Plugin、Interceptor、Annotation的方式来集成Shrio，个人不是非常喜欢，个人感觉有2个痛点：</p>
+<p>1、需要好多代码去实现Plugin、Interceptor、Annotation，虽然别人写好了，但是你还是得去了解源码，万一有个坑呢：），毕竟不是什么大而成熟且运用广泛的解决方案</p>
+<p>2、你项目里有这么多代码，想想一下</p>
+<ul>
+<li>某一天你想知道哪个Controller或Action里面加了Shiro鉴权，哪些没有加</li>
+<li>某一天你想知道各个加了Shrio鉴权的Controller或Action所对应的权限表达式是什么</li>
+<li>某一天你想知道加一个权限判断，或去掉一个   </li>
+</ul>
+<p>你得去找，去改，重新编译，重新部署。不管你疯不疯，反正我感觉我会疯的。</p>
+<h1 id="我的选择"><a href="#我的选择" class="headerlink" title="我的选择"></a>我的选择</h1><p>既然Shiro是专业的那就让它做好该做的。</p>
+<ol>
+<li>在shiro.ini里面，配置<code>自定义Realm</code>+<code>自定义filters</code>+<code>url表达式</code>，来实现自定义的验证方式</li>
+<li>用web来配置：资源、角色、用户、权限</li>
+</ol>
+<p>待续…<br>下一篇中我将会整理具体的实现步骤</p>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>

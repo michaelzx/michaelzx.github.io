@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>Docker常用命令 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Docker" title="Docker">Docker</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>Docker常用命令</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2016-09-23
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <blockquote>
+                <p>收集与网络，备用<br>
+            </blockquote>
+            
+            </p>
+<h1 id="查看所有镜像"><a href="#查看所有镜像" class="headerlink" title="查看所有镜像"></a>查看所有镜像</h1><pre><code class="bash">docker images
+</code></pre>
+<h1 id="查看正在运行的容器"><a href="#查看正在运行的容器" class="headerlink" title="查看正在运行的容器"></a>查看正在运行的容器</h1><pre><code class="bash">docker ps
+docker ps -a为查看所有的容器，包括已经停止的。
+</code></pre>
+<h1 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h1><pre><code class="bash">docker pull &lt;镜像名:tag&gt;
+</code></pre>
+<p>如</p>
+<pre><code class="bash">docker pull sameersbn/redmine:latest
+</code></pre>
+<h1 id="查看容器的root用户密码"><a href="#查看容器的root用户密码" class="headerlink" title="查看容器的root用户密码"></a>查看容器的root用户密码</h1><pre><code class="bash">docker logs &lt;容器名orID&gt; 2&gt;&amp;1 | grep &#39;^User: &#39; | tail -n1
+</code></pre>
+<p>因为docker容器启动时的root用户的密码是随机分配的。所以，通过这种方式就可以得到redmine容器的root用户的密码了。</p>
+<h1 id="查看容器日志"><a href="#查看容器日志" class="headerlink" title="查看容器日志"></a>查看容器日志</h1><pre><code class="bash">docker logs -f &lt;容器名orID&gt;
+</code></pre>
+<h1 id="删除所有容器"><a href="#删除所有容器" class="headerlink" title="删除所有容器"></a>删除所有容器</h1><pre><code class="bash">docker rm $(docker ps -a -q)
+</code></pre>
+<h1 id="删除所有已停止的容器"><a href="#删除所有已停止的容器" class="headerlink" title="删除所有已停止的容器"></a>删除所有已停止的容器</h1><pre><code class="bash">sudo docker rm `docker ps -a|grep Exited|awk &#39;{print $1}&#39;`
+</code></pre>
+<h1 id="删除单个容器"><a href="#删除单个容器" class="headerlink" title="删除单个容器"></a>删除单个容器</h1><pre><code class="bash">docker rm &lt;容器名orID&gt;
+</code></pre>
+<h1 id="停止、启动、杀死一个容器"><a href="#停止、启动、杀死一个容器" class="headerlink" title="停止、启动、杀死一个容器"></a>停止、启动、杀死一个容器</h1><pre><code class="bash">docker stop &lt;容器名orID&gt;
+docker start &lt;容器名orID&gt;
+docker kill &lt;容器名orID&gt;
+</code></pre>
+<h1 id="删除所有镜像"><a href="#删除所有镜像" class="headerlink" title="删除所有镜像"></a>删除所有镜像</h1><pre><code class="bash">docker rmi $(docker images | grep none | awk &#39;{print $3}&#39; | sort -r)
+</code></pre>
+<h1 id="运行一个新容器"><a href="#运行一个新容器" class="headerlink" title="运行一个新容器"></a>运行一个新容器</h1><p>同时为它命名、端口映射、文件夹映射。以redmine镜像为例</p>
+<pre><code class="bash">docker run --name redmine -p 9003:80 -p 9023:22 -d -v /var/redmine/files:/redmine/files -v /var/redmine/mysql:/var/lib/mysql sameersbn/redmine
+</code></pre>
+<h1 id="一个容器连接到另一个容器"><a href="#一个容器连接到另一个容器" class="headerlink" title="一个容器连接到另一个容器"></a>一个容器连接到另一个容器</h1><pre><code class="bash">docker run -i -t --name sonar -d -link mysql:db   tpires/sonar-server
+sonar
+</code></pre>
+<p>容器连接到mysql容器，并将mysql容器重命名为db。这样，sonar容器就可以使用db的相关的环境变量了。</p>
+<h1 id="迁移镜像"><a href="#迁移镜像" class="headerlink" title="迁移镜像"></a>迁移镜像</h1><p>当需要把一台机器上的镜像迁移到另一台机器的时候，需要保存镜像与加载镜像。</p>
+<p>机器A:</p>
+<pre><code class="bash">docker save busybox-1 &gt; /home/save.tar
+</code></pre>
+<p>使用scp将save.tar拷到机器b上，然后：</p>
+<pre><code class="bash">docker load &lt; /home/save.tar
+</code></pre>
+<h1 id="构建自己的镜像"><a href="#构建自己的镜像" class="headerlink" title="构建自己的镜像"></a>构建自己的镜像</h1><pre><code class="bash">docker build -t &lt;镜像名&gt; &lt;Dockerfile路径&gt;
+</code></pre>
+<p>如Dockerfile在当前路径：</p>
+<pre><code class="bash">docker build -t xx/gitlab .
+</code></pre>
+<h1 id="重新查看container的stdout"><a href="#重新查看container的stdout" class="headerlink" title="重新查看container的stdout"></a>重新查看container的stdout</h1><pre><code class="bash"># 启动top命令，后台运行
+$ ID=$(sudo docker run -d ubuntu /usr/bin/top -b)
+# 获取正在running的container的输出
+$ sudo docker attach $ID
+top - 02:05:52 up  3:05,  0 users,  load average: 0.01, 0.02, 0.05Tasks:   1 total,   1 running,   0 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.1%us,  0.2%sy,  0.0%ni, 99.7%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:    373572k total,   355560k used,    18012k free,    27872k buffers
+Swap:   786428k total,        0k used,   786428k free,   221740k cached
+^C$
+$ sudo docker stop $ID
+</code></pre>
+<h1 id="后台运行-d-、并暴露端口-p"><a href="#后台运行-d-、并暴露端口-p" class="headerlink" title="后台运行(-d)、并暴露端口(-p)"></a>后台运行(-d)、并暴露端口(-p)</h1><pre><code class="bash">docker run -d -p 127.0.0.1:33301:22 centos6-ssh
+</code></pre>
+<h1 id="从container中拷贝文件出来"><a href="#从container中拷贝文件出来" class="headerlink" title="从container中拷贝文件出来"></a>从container中拷贝文件出来</h1><pre><code class="bash">sudo docker cp 7bb0e258aefe:/etc/debian_version .
+</code></pre>
+<p>拷贝7bb0e258aefe中的/etc/debian_version到当前目录下。</p>
+<p><code>注意</code>：只要7bb0e258aefe没有被删除，文件命名空间就还在，可以放心的把exit状态的container的文件拷贝出来</p>
+<h1 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h1><h2 id="查看所有日志文件及大小"><a href="#查看所有日志文件及大小" class="headerlink" title="查看所有日志文件及大小"></a>查看所有日志文件及大小</h2><p>容器日志一般存放在/var/lib/docker下面，可使用如下命令查看各个日志的文件大小</p>
+<pre><code class="bash">ls -lh $(find /var/lib/docker/containers/ -name *-json.log)
+</code></pre>
+<h2 id="如何清理日志"><a href="#如何清理日志" class="headerlink" title="如何清理日志"></a>如何清理日志</h2><p>如果docker容器正在运行，那么使用rm -rf 方式删除日志后，通过df -h会发现磁盘空间并没有释放</p>
+<p>原因：在Linux或者Unix系统中，通过rm或者文件管理器删除文件将会从文件系统的目录结构上解除链接(unlink).然而如果文件是被打开的（有一个进程正在使用），那么进程将仍然可以读取该文件，磁盘空间也一直被占用</p>
+<p>清理脚本：</p>
+<pre><code>#!/bin/sh
+
+echo &quot; ==== start clean docker containers logs ====&quot;
+
+logs=$(find /var/lib/docker/containers/ -name *-json.log)
+
+for log in $logs
+        do
+                echo &quot;clean logs : $log&quot;
+                cat /dev/null &gt; $log
+        done
+
+
+echo &quot;==== end clean docker containers logs ====&quot;
+</code></pre>
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2018 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>
