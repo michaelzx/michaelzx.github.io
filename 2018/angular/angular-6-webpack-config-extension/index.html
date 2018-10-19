@@ -136,15 +136,16 @@ header.intro-header .header-mask{
 </blockquote>
 <p>还好有一个第三方库<code>angular-builders</code>对<code>@angular-devkit/build-angular</code>进行了封装，可以很方便的来扩展Angular的webpack配置</p>
 <p><a href="https://github.com/meltedspark/angular-builders" target="_blank" rel="noopener">https://github.com/meltedspark/angular-builders</a></p>
-<h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><pre><code>npm i -D @angular-builders/custom-webpack
+<h1 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h1><pre><code class="bash">npm i -D @angular-builders/custom-webpack
 npm i -D @angular-builders/dev-server
-</code></pre><h1 id="修改angular-json"><a href="#修改angular-json" class="headerlink" title="修改angular.json"></a>修改<code>angular.json</code></h1><h2 id="projects-project-name-architect-build节点"><a href="#projects-project-name-architect-build节点" class="headerlink" title="projects.{project name}.architect.build节点"></a><code>projects.{project name}.architect.build</code>节点</h2><ul>
+</code></pre>
+<h1 id="修改angular-json"><a href="#修改angular-json" class="headerlink" title="修改angular.json"></a>修改<code>angular.json</code></h1><h2 id="projects-project-name-architect-build节点"><a href="#projects-project-name-architect-build节点" class="headerlink" title="projects.{project name}.architect.build节点"></a><code>projects.{project name}.architect.build</code>节点</h2><ul>
 <li><code>builder</code>替换成:<code>@angular-builders/custom-webpack:browser</code></li>
 <li><code>options</code>增加<pre><code>&quot;customWebpackConfig&quot;: {
-&quot;path&quot;: &quot;./extra-webpack.config.js&quot;,
-&quot;mergeStrategies&quot;: {
-  &quot;loaders&quot;: &quot;append&quot;
-}
+  &quot;path&quot;: &quot;./extra-webpack.config.js&quot;,
+  &quot;mergeStrategies&quot;: {
+      &quot;loaders&quot;: &quot;append&quot;
+  }
 },
 </code></pre>这里面的具体参数配置，可通过<a href="https://github.com/meltedspark/angular-builders/tree/master/packages/custom-webpack#custom-webpack-config-object做了解" target="_blank" rel="noopener">这里</a>一个了解</li>
 </ul>
