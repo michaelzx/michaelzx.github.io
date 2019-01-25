@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="我是一个web全栈工程师，热爱各种web有关的互联技术，无论前端、还是后端。这个网站中，我总结了部分学习和工作的经验，分享出来与大家分享交流。">
+    <meta name="keyword"  content="章宵,michael,听风,web前端,web后端,持续集成,Spring Boot,Spring Cloud,Vue,Angular,Docker,Python,Node">
+    <!-- <link rel="shortcut icon" href="/img/favicon.ico"> -->
+    
+    <title>使用Gradle发布构件(Jar)到Maven中央仓库 - 听风.Michael</title>
+    
+    <!--百度统计-->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?d0c0457f89e68e1f8accd218fb7338ea";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <!-- Bootstrap Core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <!--highlight-->
+    <link rel="stylesheet" href="/css/highlight.github.css">
+    <!-- Custom Fonts -->
+    <script src="//at.alicdn.com/t/font_702425_w2w4nyr7wxywrk9.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/zx-blog.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <nav id="navbar-zx" class="navbar navbar-expand-lg fixed-top">
+  
+  <a class="navbar-brand" href="/">听风.Michael</a>
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end ml-auto">
+      
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/">首页 / Home</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/archive">归档 / Archive</a>
+      </li>
+      
+      <li class="nav-item">
+        <a class="nav-link" href="/about">关于 / About</a>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+
+    <!-- Page Header -->
+
+<style>
+header.intro-header{
+    position: relative;
+    
+    background-image:url('/img/header-5.jpg')
+}
+header.intro-header .header-mask{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: rgba(0,0,0, 0.2);
+}
+</style>
+<header class="intro-header">
+  <div class="header-mask"></div>
+  <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1">
+            <div class="post-heading">
+                <div class="tags">
+                    
+                        <a class="tag" href="/tags/后端" title="后端">后端</a>
+                    
+                        <a class="tag" href="/tags/Gradle" title="Gradle">Gradle</a>
+                    
+                        <a class="tag" href="/tags/Maven" title="Maven">Maven</a>
+                    
+                </div>
+                <h1 class="display-1" data-toc-skip>使用Gradle发布构件(Jar)到Maven中央仓库</h1>
+                <h2 class="subTitle" data-toc-skip></h2>
+                <span class="meta">
+                    Posted by Michael on
+                    2019-01-22
+                </span>
+            </div>
+        </div>
+        
+      </div>
+  </div>
+</header>
+
+
+<!-- Main Content -->
+<div class="container">
+    
+<!-- Post Content -->
+<div class="row mt-4">
+    <div class="
+                col-lg-8 offset-lg-1
+                col-md-12
+                col-sm-12
+                col-xs-12
+                post-list-container
+            ">
+        <article class="post-context">
+            
+            <h1 id="OSSRH"><a href="#OSSRH" class="headerlink" title="OSSRH"></a>OSSRH</h1><blockquote>
+<p>在开始之前，先对<code>OSSRH</code>做下了解是很必要的，因为一开始，我并不知道这是个啥玩儿意。我想和我一样的人应该还是有很多的。</p>
+</blockquote>
+<p><code>OSSRH</code>：<code>Sonatype Open Source Software Repository Hosting Service</code>，为开源软件提供maven仓库托管服务。你可以在上面部署snapshot、release等，最后你可以申请把你的release同步到<code>Maven Central Repository</code>（<code>Maven中央仓库</code>）。</p>
+<p>个人的理解，<code>OSSRH</code>是<code>Maven中央仓库</code>的前置审批仓库，只有你完全符合了发布要求，成功的将你的项目发布到了<code>OSSRH</code>，才有机会申请同步到<code>Maven中央仓库</code>。</p>
+<p>这篇主要是记录这整个流程，方便以后自己查阅，同时可以帮助到想做同样事情的朋友。</p>
+<h1 id="1、注册Sonatype-JIRA账号"><a href="#1、注册Sonatype-JIRA账号" class="headerlink" title="1、注册Sonatype JIRA账号"></a>1、注册Sonatype JIRA账号</h1><blockquote>
+<p>JIRA是Atlassian公司出品的项目与事务跟踪工具，被广泛应用于缺陷跟踪、客户服务、需求收集、流程审批、任务跟踪、项目跟踪和敏捷管理等工作领域。</p>
+</blockquote>
+<p>网址：<a href="https://issues.sonatype.org/" target="_blank" rel="noopener">https://issues.sonatype.org/</a></p>
+<p>无非就是填写下注册信息，没有什么特别的</p>
+<h1 id="2、创建一个Issue"><a href="#2、创建一个Issue" class="headerlink" title="2、创建一个Issue"></a>2、创建一个Issue</h1><h2 id="填写资料"><a href="#填写资料" class="headerlink" title="填写资料"></a>填写资料</h2><p>可以在头部看到一个<code>Create</code>的按钮</p>
+<p><img src="/images/sonatype-create-issue-button.png" alt="sonatype-create-issue-button"></p>
+<p>会弹出<code>Create Issue</code>表单</p>
+<p><img src="/images/sonatype-create-issue-form.png" alt="sonatype-create-issue-form"></p>
+<h4 id="Project"><a href="#Project" class="headerlink" title="Project"></a>Project</h4><p>选择<code>Community Support - Open Source Project Repository Hosting (OSSRH)</code></p>
+<h4 id="Issue-Type"><a href="#Issue-Type" class="headerlink" title="Issue Type"></a>Issue Type</h4><p>选择<code>New Project</code></p>
+<h4 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h4><p>写个标题做个简单概述你要做啥。真不知道写什么，直接把项目名称写上就行，我就这么干了哈。</p>
+<h4 id="Group-Id"><a href="#Group-Id" class="headerlink" title="Group Id"></a>Group Id</h4><ul>
+<li><p>自己有域名<br>可以使用子域名作为<code>Group Id</code> 。例：我的项目叫<code>paladin2</code>，那么就用<code>org.zhangxiao.paladin2</code>作为<code>Group Id</code>    </p>
+<blockquote>
+<p>注意：不能瞎编一个，因为后面审核人员会来审核你是否是该域名的拥有者</p>
+</blockquote>
+</li>
+<li><p>自己没域名<br>可以借助github，例：我的用户名为<code>michaelzx</code>，那么就用<code>com.github.michaelzx.paladin2</code>作为作为<code>Group Id</code>    </p>
+</li>
+</ul>
+<h4 id="Project-URL"><a href="#Project-URL" class="headerlink" title="Project URL"></a>Project URL</h4><p>要与<code>Group Id</code>一定关联性</p>
+<ul>
+<li>例1：<br><code>Project URL</code>=<code>http://paladin2.zhangxiao.org</code><br><code>Group Id</code>=<code>org.zhangxiao.paladin2</code></li>
+<li>例2：<br><code>Project URL</code>=<code>https://github.com/michaelzx/Paladin2</code><br><code>Group Id</code>=<code>com.github.michaelzx.paladin</code></li>
+</ul>
+<h4 id="SCM-url"><a href="#SCM-url" class="headerlink" title="SCM url"></a>SCM url</h4><p>版本仓库的拉取地址</p>
+<h2 id="等待回复"><a href="#等待回复" class="headerlink" title="等待回复"></a>等待回复</h2><p>如果有问题，老外在评论中把问题给你指出来，可以在原有的issue把资料改正确</p>
+<blockquote>
+<p>我之前是犯了个低级的错误把<code>Group Id</code>写成了域名<br>审核人员要处理的issue很多，你可能要耐心等待一会，不要急<br>我之前急了，就重新提交了2个新的issue，最后管理员还是耐心的把重复的issue关闭</p>
+</blockquote>
+<p>如果一切顺利，那么你会收到审核人员，这样的一个评论：</p>
+<p><img src="/images/sonatype-create-issue-success.png" alt="sonatype-create-issue-success"></p>
+<h1 id="3、准备工作"><a href="#3、准备工作" class="headerlink" title="3、准备工作"></a>3、准备工作</h1><h2 id="文件要求"><a href="#文件要求" class="headerlink" title="文件要求"></a>文件要求</h2><p>为了确保中央存储库中可用组件的质量水平，<code>OSSRH</code>对提交的文件有明确的要求。</p>
+<p>一个基础的提交，应该包含一下文件：</p>
+<pre><code>example-application-1.4.7.pom
+example-application-1.4.7.pom.asc
+example-application-1.4.7.jar
+example-application-1.4.7.jar.asc
+example-application-1.4.7-sources.jar
+example-application-1.4.7-sources.jar.asc
+example-application-1.4.7-javadoc.jar
+example-application-1.4.7-javadoc.jar.asc
+</code></pre><ul>
+<li>除了jar包和pom文件，<code>Javadoc</code>和<code>Sources</code>是必须的，后面会说到用Gradle的一些插件来生成</li>
+<li>每个文件都有一个对应的<code>asc</code>文件，这是<code>GPG</code>签名文件，可以用于校验文件</li>
+</ul>
+<h2 id="GPG"><a href="#GPG" class="headerlink" title="GPG"></a>GPG</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>说明：后续过程均在<code>OSX</code>环境下</p>
+<p><code>OSX</code>下可以通过brew来安装<code>gpg</code>命令行工具</p>
+<pre><code class="bash">$ brew update
+$ brew install -v gpg
+</code></pre>
+<p>你会发现从<code>brew</code>的<code>gpg</code>命令行工具，做了国际化支持，连help都是中文，赞👍</p>
+<blockquote>
+<p>另外推荐一个工具<code>GPG Suite</code>，<a href="https://gpgtools.org/" target="_blank" rel="noopener">传送门</a><br>在OSX提供了一个图形化界面，把GPG作为钥匙串来做管理，蛮有意思，不过感觉缺失点功能</p>
+</blockquote>
+<blockquote>
+<p>Windows下<br>可以安装<code>gpg4win</code>，网址：<a href="https://www.gpg4win.org/download.html" target="_blank" rel="noopener">传送门</a><br>页面最上面有个很大的下载按钮，点了以后，貌似会让你捐个款啥的……<br>不过你可以往下看，有所有版本的列表地址，可以跳过捐款，在祭上一个<a href="https://files.gpg4win.org/" target="_blank" rel="noopener">传送门</a><br>人家只是隐藏的好了一些而已，还是免费的。装完了以后，在命令行中也可以用gpg了</p>
+</blockquote>
+<h3 id="公钥、私钥、签名"><a href="#公钥、私钥、签名" class="headerlink" title="公钥、私钥、签名"></a>公钥、私钥、签名</h3><p>GPG的默认秘钥类型是RSA，这里涉及涉及几个概念<code>公钥</code>（public-key）、<code>私钥</code>（secret-key）、<code>签名</code>(sign/signature)</p>
+<ul>
+<li><code>公钥</code>和<code>私钥</code>是成对</li>
+<li><code>公钥</code>加密，<code>私钥</code>解密。</li>
+<li><code>私钥</code>签名，<code>公钥</code>验证。</li>
+</ul>
+<h3 id="新建一个密钥"><a href="#新建一个密钥" class="headerlink" title="新建一个密钥"></a>新建一个密钥</h3><p>生成了密钥以后，才能导出公钥、私钥</p>
+<pre><code>$ gpg --generate-key
+</code></pre><p>创建的时候，会让你输入<code>密码</code>，别输了以后忘记了，后面gradle插件中会用到。</p>
+<h3 id="查看已经生成的密钥"><a href="#查看已经生成的密钥" class="headerlink" title="查看已经生成的密钥"></a>查看已经生成的密钥</h3><pre><code>$ gpg -k
+---------------------------------
+pub   rsa2048 2019-01-25 [SC] [有效至：2021-01-24]
+      72963F6B33D962380B1DC4BD8C446B86DF855F85
+uid           [ 绝对 ] zhangxiao&#39;paladin2 &lt;mail@zhangxiao.org&gt;
+sub   rsa2048 2019-01-25 [E] [有效至：2021-01-24]
+</code></pre><p>72963F6B33D962380B1DC4BD8C446B86DF855F85，这个叫做<code>密钥指纹</code>，用来做唯一识别<br>后面8位<code>DF855F85</code>,叫做<code>标识</code>或<code>KEY ID</code>，后面会用到</p>
+<h3 id="导出私钥文件"><a href="#导出私钥文件" class="headerlink" title="导出私钥文件"></a>导出私钥文件</h3><p>很多英文文档或文章中经常出现<code>KeyRingFile</code>这个词，这个到底是啥？</p>
+<blockquote>
+<p><a href="https://users.ece.cmu.edu/~adrian/630-f04/PGP-intro.html" target="_blank" rel="noopener">https://users.ece.cmu.edu/~adrian/630-f04/PGP-intro.html</a><br>Keys are stored in encrypted form. PGP stores the keys in two files on your hard disk; one for public keys and one for private keys. These files are called keyrings. As you use PGP, you will typically add the public keys of your recipients to your public keyring. Your private keys are stored on your private keyring. If you lose your private keyring, you will be unable to decrypt any information encrypted to keys on that ring.</p>
+</blockquote>
+<pre><code>$ gpg --export-secret-keys [密钥指纹] &gt; secret.gpg
+</code></pre><p>以上命令就可以生成一个<code>二进制</code>的私钥文件，后面需要配置到gradle中，让插件帮我们给文件批量签名</p>
+<blockquote>
+<p>加上<code>-a</code>会生成一个用ASCII 字符封装的<code>文本</code>文件，方便复制,不过我们这里不需要</p>
+</blockquote>
+<h3 id="上传公钥到公钥服务器"><a href="#上传公钥到公钥服务器" class="headerlink" title="上传公钥到公钥服务器"></a>上传公钥到公钥服务器</h3><pre><code>$ gpg --keyserver keyserver.ubuntu.com --send-keys [密钥指纹]
+</code></pre><p>在sonatype的仓库提交后，会需要一个校验步骤<br>会需要从<code>多个</code>公钥服务器上下载匹配的公钥，然后来校验你上传的文件的签名</p>
+<p><img src="/images/sonatype-gpg-signature-validation.jpg" alt="sonatype-gpg-signature-validation"></p>
+<p>简单的说，你用来签名的<code>私钥</code>和你上传的<code>公钥</code>，必须要一对，这样才能通过校验</p>
+<p>以下是sonatype会去拉取的公钥服务器列表</p>
+<pre><code>keys.gnupg.net
+pool.sks-keyservers.net
+keyserver.ubuntu.com
+</code></pre><blockquote>
+<p>为什么我要特意列出来？<br>因为有些文章或教程里面，都仅给出了一个服务器，如<code>pool.sks-keyservers.net</code><br>但是，我在实际操作有时候因为网络原因，并不是总能成功上传。<br>所以，如果把公钥上传到<code>keyserver.ubuntu.com</code>也是OK的。</p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>密钥的<code>key id</code></li>
+<li>密钥的<code>password</code></li>
+<li>私钥的<code>KeyRingFile</code></li>
+<li>公钥上传到了公钥服务器</li>
+</ol>
+<p>准备好了以上几项，我们就可以开始撸Gradle了</p>
+<blockquote>
+<p>有些文章说，最好是先生成一个吊销凭证备用，暂时不知道什么场景下会用到</p>
+</blockquote>
+<h1 id="4、配置Gradle插件"><a href="#4、配置Gradle插件" class="headerlink" title="4、配置Gradle插件"></a>4、配置Gradle插件</h1><blockquote>
+<p>Gradle版本：<code>4.10.2</code><br>start.spring.io中生成的gradle工程，是用<code>4.10.2</code>。所以我就这个版本为标准。</p>
+</blockquote>
+<p><code>signing</code>：<a href="https://docs.gradle.org/4.10.2/userguide/signing_plugin.html" target="_blank" rel="noopener">https://docs.gradle.org/4.10.2/userguide/signing_plugin.html</a><br><code>maven-publish</code>：<a href="https://docs.gradle.org/4.10.2/userguide/publishing_maven.html" target="_blank" rel="noopener">https://docs.gradle.org/4.10.2/userguide/publishing_maven.html</a></p>
+<p>主要核心就是以上两个插件</p>
+<p>修改<code>build.gradle</code></p>
+<pre><code class="groovy">// ... 在最下面新增以下代码
+
+apply plugin: &#39;maven-publish&#39;
+apply plugin: &#39;signing&#39;
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = &#39;sources&#39;
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = &#39;javadoc&#39;
+}
+
+
+publishing {
+    // 定义发布什么
+    publications {
+        mavenJava(MavenPublication) {
+            // groupId = project.group
+            // artifactId = project.name
+            // version = project.version
+            // groupId,artifactId,version，如果不定义，则会按照以上默认值执行
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            pom {
+                // 构件名称
+                // 区别于artifactId，可以理解为artifactName
+                name = &#39;Paladin2 Common&#39;
+                // 构件描述
+                description = &#39;Paladin2 Common library&#39;
+                // 构件主页
+                url = &#39;https://paladin2.zhangxiao.org&#39;
+                // 许可证名称和地址
+                licenses {
+                    license {
+                        name = &#39;The Apache License, Version 2.0&#39;
+                        url = &#39;http://www.apache.org/licenses/LICENSE-2.0.txt&#39;
+                    }
+                }
+                // 开发者信息
+                developers {
+                    developer {
+                        name = &#39;听风.Michael&#39;
+                        email = &#39;mail@zhangxiao.org&#39;
+                    }
+                }
+                // 版本控制仓库地址
+                scm {
+                    url = &#39;https://github.com/michaelzx/Paladin2&#39;
+                    connection = &#39;scm:git:git://github.com/michaelzx/Paladin2.git&#39;
+                    developerConnection = &#39;scm:git:ssh://git@github.com:michaelzx/Paladin2.git&#39;
+                }
+            }
+        }
+    }
+    // 定义发布到哪里
+    repositories {
+        maven {
+            // 从命令行参数中获取账号密码，这样你把这个文件传到GitHub这关系也不大，不会暴露账号密码
+            // -DsonatypeUsername=michaelzx -DsonatypePassword=xxxxxx
+            def sonatypeUsername = System.getProperty(&quot;sonatypeUsername&quot;)
+            def sonatypePassword = System.getProperty(&quot;sonatypePassword&quot;)
+            // 打印出来看看，你参数设置对了没
+            println(&quot;sonatypeUsername:&quot; + sonatypeUsername)
+            println(&quot;sonatypePassword:&quot; + sonatypePassword)
+            url &quot;https://oss.sonatype.org/service/local/staging/deploy/maven2&quot;
+            credentials {
+                // 这里就是之前在issues.sonatype.org注册的账号
+                // 直接写在不太安全，应该是有办法通过参数，配置到工程之外
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+
+javadoc {
+    // &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+    // 防止本地打开中文乱码
+    options.addStringOption(&quot;charset&quot;, &quot;UTF-8&quot;)
+}
+</code></pre>
+<p>在工程根目录下新增<code>gradle.properties</code></p>
+<pre><code>signing.keyId=密钥keyId
+signing.password=密钥password
+signing.secretKeyRingFile=私钥keyRingFile路径
+</code></pre><p>如果要提交到GitHub上，那么<code>keyId</code>,<code>password</code>好像是暴露了，不过感觉好像也没什么关系，把私钥保护好就好了</p>
+<h1 id="5、提交到Sonatype仓库"><a href="#5、提交到Sonatype仓库" class="headerlink" title="5、提交到Sonatype仓库"></a>5、提交到Sonatype仓库</h1><p>首先，用Gradle执行<code>publishToMavenLocal</code>任务，先在本地发布下，看看生成了哪些文件，或还有什么问题</p>
+<p>然后，用Gradle执行<code>publish</code>任务，发布到指定的maven仓库</p>
+<p>如果没有报错，那么恭喜你，已经成功提交到了sonatype的仓库中</p>
+<p>但是提交成功，并不代表发布成功</p>
+<h1 id="6、到Sonatype-OSS发布"><a href="#6、到Sonatype-OSS发布" class="headerlink" title="6、到Sonatype OSS发布"></a>6、到Sonatype OSS发布</h1><p>用你之前注册的账号密码，登录：<a href="https://oss.sonatype.org/" target="_blank" rel="noopener">https://oss.sonatype.org/</a></p>
+<p>登录后查看左侧的<code>Build Promotion</code>-&gt;<code>Staging Repositories</code></p>
+<p>你的提交，会出现在<code>最下面</code>，至于其他是啥，我也不太清楚😂</p>
+<p><img src="/images/sonatype-staging-repository-close.jpg" alt="sonatype-staging-repository-close"></p>
+<h2 id="Close"><a href="#Close" class="headerlink" title="Close"></a>Close</h2><p>你的提交在未处理前，是<code>open</code>状态，然后点击<code>Close</code>按钮。</p>
+<blockquote>
+<p>一开始不太明白这个<code>Close</code>是啥意思，后来看了下，主要按照中央仓库的要求来验证下你上传到文件<br>签名就是其中一个步骤，会去公钥服务器拉取公钥，然后来验证你所有的文件</p>
+</blockquote>
+<p>需要等待一会，等它执行完毕，状态会从<code>open</code>变成<code>closed</code></p>
+<blockquote>
+<p>如果碰到错误的话，仔细看下<code>Activity</code>选项卡，执行了什么步骤，那个步骤出现了什么错误，很清晰的</p>
+</blockquote>
+<h2 id="Release"><a href="#Release" class="headerlink" title="Release"></a>Release</h2><p>一般情况下，感觉如果顺利<code>close</code>后，再次选中点击<code>Release</code>，耐心等待一会，就大功告成了！</p>
+<p>可以在侧边栏<code>Artifact Search</code>中搜索下你的<code>groupId</code>，此时应该能看到对应的构件名称和版本了</p>
+<h1 id="7、回复Issue"><a href="#7、回复Issue" class="headerlink" title="7、回复Issue"></a>7、回复Issue</h1><p>但是很抱歉，到此为止，你的jar包，还不会同步到maven仓库中</p>
+<p>你需要在你原先创建issue中，告诉下管理人员，你已经完成了第一次发布</p>
+<p>我用我蹩脚的英文，回复如下：</p>
+<blockquote>
+<p>I have already completed the first release.</p>
+</blockquote>
+<p>然后管理人员给我回复了：</p>
+<blockquote>
+<p>Central sync is activated for org.zhangxiao.paladin2. After you successfully release, your component will be published to Central, typically within 10 minutes, though updates to search.maven.org can take up to two hours.</p>
+</blockquote>
+<p>OK，至此，你的构建就会同步到<code>Maven Central Repository</code>了。</p>
+<h1 id="8、同步需要多久"><a href="#8、同步需要多久" class="headerlink" title="8、同步需要多久"></a>8、同步需要多久</h1><p>可能你会像我一样很着急，啥时候可以用，怎么还搜不到呢~。~<br>从sonatype同步到中央仓库，的确是需要一定的时间  </p>
+<p>不过根据我的观察，文件的同步，会早于索引的同步  </p>
+<p>比如，比如你等了半天，然后 <a href="https://search.maven.org/" target="_blank" rel="noopener">https://search.maven.org/</a> 上搜一下依然搜不到<br>那么，你可以去 <a href="https://repo1.maven.org/maven2/" target="_blank" rel="noopener">https://repo1.maven.org/maven2/</a> 上按照坐标找下，是否能找到你的包</p>
+<p>如果能找到，那你就可以开始引用它了</p>
+<h1 id="9、新版本更新"><a href="#9、新版本更新" class="headerlink" title="9、新版本更新"></a>9、新版本更新</h1><p>只要完成第一个发布，后续就不需要再创建<code>issue</code>了，只要重复<code>5-6</code>步骤可以了。</p>
+<p>你可以在<code>groupId范围内</code>发布<code>任意名称</code>的构件</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>以前在<code>NPM</code>仓库中发布过自己的东西。相比之下，<code>Maven</code>仓库的发布流程，让人感觉严谨很多。</p>
+<p>赶紧一起在Maven全球中央仓库中，留下你自己专属的印记吧！</p>
+<p>一定会让你感觉棒棒的^_^</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://central.sonatype.org/pages/ossrh-guide.html" target="_blank" rel="noopener">https://central.sonatype.org/pages/ossrh-guide.html</a></p>
+
+        </article>
+        <div>
+            <!-- 来必力City版安装代码 -->
+            <div id="lv-container" data-id="city" data-uid="MTAyMC8zNzI2NS8xMzc5OQ==">
+                <script type="text/javascript">
+                    (function(d, s) {
+                        var j, e = d.getElementsByTagName(s)[0];
+
+                        if (typeof LivereTower === 'function') { return; }
+
+                        j = d.createElement(s);
+                        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                        j.async = true;
+
+                        e.parentNode.insertBefore(j, e);
+                    })(document, 'script');
+                </script>
+                <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+            </div>
+            <!-- City版安装代码已完成 -->
+        </div>
+    </div>
+    <aside class="col-lg-3 pr-4 .d-none .d-lg-block .d-xl-none side-bar">
+        <nav id="post-toc" class="sticky-top"></nav>
+    </aside>
+</div>
+
+
+</div>
+
+
+    <!-- Footer -->
+    <footer>
+  <div class="container">
+    <div class="copyright text-muted text-center">
+    Copyright &copy; 听风.Michael 2019 
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!-- highlight -->
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script src="/js/bootstrap-toc.js"></script>
+<script src="/js/zx-blog.js"></script>
+</body>
+</html>
